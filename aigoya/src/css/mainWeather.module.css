@@ -1,0 +1,31 @@
+.card {
+  background: linear-gradient( #0EA5E9, #3B82F6);
+  border-radius: 16px;
+  padding: 20px;
+  width: 320px;
+  height: 132px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Arial', sans-serif;
+}
+
+.weatherInfo {
+  margin-bottom: 12px;
+}
+
+.temp {
+  font-size: 28px;
+  margin: 0;
+}
+
+.summary {
+  font-size: 16px;
+  margin: 4px 0 0;
+}
+
+.recommendation {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
