@@ -4,7 +4,7 @@ import styles from '../css/mainPage.module.css';
 const mainPage = () => {
   return (
     <div className={styles.mainContainer}>
-      
+      main
     </div>
   );
 }

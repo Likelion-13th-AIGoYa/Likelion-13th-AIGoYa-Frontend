@@ -5,12 +5,3 @@
 *::after {
   box-sizing: border-box;
 }
-
-body {
-  min-height: 100vh;
-}
-
-.App {
-  text-align: center;
-  background-color: #61dafb;
-}

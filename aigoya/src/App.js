@@ -1,10 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from './page/mainPage';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      h
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
