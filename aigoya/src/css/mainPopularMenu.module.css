@@ -1,0 +1,79 @@
+.section {
+    background: #fff;
+    width: 320px;
+    height: 290px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 제목 */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 20px;
+}
+
+/* 리스트 설정 */
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 리스트 내부 메뉴 카드 */
+.card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #f7f9fc;
+    margin: 12px 20px;
+    width: 280px;
+    height: 70px;
+}
+
+/* 1, 2, 3등 랭킹 뱃지 설정 */
+.rankBadge {
+    background: orange;
+    color: white;
+    font-weight: bold;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+
+    display: grid;
+    place-items: center;
+}
+
+.rankSilver {
+    background: silver;
+}
+
+.rankBronze {
+    background: peru;
+}
+
+/* 메뉴명, 메뉴 설명 컨테이너 */
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #888;
+}
+
+/* 그릇수 */
+.sales {
+    color: #2f80ed;
+    font-weight: bold;
+}
