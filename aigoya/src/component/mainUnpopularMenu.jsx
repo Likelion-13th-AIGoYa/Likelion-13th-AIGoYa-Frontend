@@ -10,7 +10,7 @@ const unpopularMenus = [
 function MainPopularMenu() {
     return (
         <section className={styles.section}>
-            <h2 className={styles.title}>📉 주간 비인기 메뉴</h2>
+            <h2 className={styles.title}>😢 주간 비인기 메뉴</h2>
 
             <ul className={styles.list}>
                 {unpopularMenus.map((menu, index) => (
@@ -18,7 +18,7 @@ function MainPopularMenu() {
                         <div
                             className={`${styles.rankBadge} ${index === 1 ? styles.rankSilver : index === 2 ? styles.rankBronze : ""}`}
                         >
-                            {index + 1}
+                            <span className={styles.BadgeIndex}>{index + 1}</span>
                         </div>
 
                         <div className={styles.info}>
