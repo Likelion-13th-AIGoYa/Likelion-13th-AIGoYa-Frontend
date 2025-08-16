@@ -36,7 +36,7 @@ const MainChart = () => {
         const chartWidth = width - padding * 2;
         const chartHeight = height - padding * 2;
         const maxValue = Math.max(...salesData.map(d => d.sales));
-        const barWidth = chartWidth / salesData.length * 0.6;
+        const itemCount = salesData.length;
 
         // Y축 격자선 그리기
         ctx.strokeStyle = '#F1F5F9';
@@ -49,35 +49,49 @@ const MainChart = () => {
             ctx.stroke();
         }
 
-        // 막대 그리기
-        salesData.forEach((item, index) => {
-            const x = padding + (chartWidth / salesData.length) * index + (chartWidth / salesData.length - barWidth) / 2;
-            const barHeight = (item.sales / maxValue) * chartHeight;
-            const y = padding + chartHeight - barHeight;
-
-            // 그라데이션 생성
-            const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
-            gradient.addColorStop(0, '#3B82F6');
-            gradient.addColorStop(1, '#60A5FA');
-
-            // 막대 그리기
-            ctx.fillStyle = gradient;
-            ctx.fillRect(x, y, barWidth, barHeight);
-
-            // X축 라벨 (시간)
-            ctx.fillStyle = '#64748B';
-            ctx.font = '11px system-ui, -apple-system, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(item.time, x + barWidth / 2, height - padding + 15);
-
-            // 값 표시 (막대 위)
-            if (barHeight > 20) {
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = 'bold 9px system-ui, -apple-system, sans-serif';
-                const valueText = (item.sales / 1000).toFixed(0) + 'K';
-                ctx.fillText(valueText, x + barWidth / 2, y - 5);
+        // 꺾은선 차트 그리기
+        ctx.strokeStyle = '#3B82F6';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < itemCount; i++) {
+            const x = padding + (chartWidth / (itemCount - 1)) * i;
+            const y = padding + chartHeight - (salesData[i].sales / maxValue) * chartHeight;
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
             }
-        });
+        }
+        ctx.stroke();
+
+        // 표식 그리기
+        ctx.fillStyle = '#3B82F6';
+        for (let i = 0; i < itemCount; i++) {
+            const x = padding + (chartWidth / (itemCount - 1)) * i;
+            const y = padding + chartHeight - (salesData[i].sales / maxValue) * chartHeight;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        // X축 라벨 (시간)
+        ctx.fillStyle = '#64748B';
+        ctx.font = '11px system-ui, -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        for (let i = 0; i < itemCount; i++) {
+            const x = padding + (chartWidth / (itemCount - 1)) * i;
+            ctx.fillText(salesData[i].time, x, height - padding + 15);
+        }
+
+        // 값 표시 (표식 위)
+        ctx.fillStyle = '#3B82F6';
+        ctx.font = 'bold 9px system-ui, -apple-system, sans-serif';
+        for (let i = 0; i < itemCount; i++) {
+            const x = padding + (chartWidth / (itemCount - 1)) * i;
+            const y = padding + chartHeight - (salesData[i].sales / maxValue) * chartHeight;
+            const valueText = (salesData[i].sales / 1000).toFixed(0) + 'K';
+            ctx.fillText(valueText, x, y - 10);
+        }
     };
 
     useEffect(() => {
@@ -96,7 +110,7 @@ const MainChart = () => {
                 <p className={styles.headerTitle}>시간대별 매출 현황</p>
                 <div className={styles.headerButtonContainer}>
                     {['전체', '오늘', '이번 주', '이번 달'].map(period => (
-                        <button 
+                        <button
                             key={period}
                             className={`${styles.headerButton} ${selectedPeriod === period ? styles.activeButton : ''}`}
                             onClick={() => handlePeriodChange(period)}
@@ -108,7 +122,7 @@ const MainChart = () => {
             </div>
             <div className={styles.chartMainContainer}>
                 <div className={styles.chartWrapper}>
-                    <canvas 
+                    <canvas
                         ref={chartRef}
                         width={760}
                         height={200}
