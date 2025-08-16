@@ -1,8 +1,8 @@
 .mainContainer {
-    height: 100vh;
     background-color: #F8FAFC;
-}
-
-.mainChartContainer {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+    margin: 20px auto;
+    align-items: center;
 }
