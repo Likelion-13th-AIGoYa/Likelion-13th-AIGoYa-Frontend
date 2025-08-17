@@ -8,11 +8,17 @@ import MainChatBot from '../component/mainChatBot';
 const mainPage = () => {
   return (
     <div className={styles.mainContainer}>
-      <MainWeather/>
-      <MainPopularMenu/>
-      <MainUnpopularMenu/>
-      <MainChart/>
-      <MainChatBot/>
+      <div className={styles.mainSection}>
+        <div className={styles.leftSection}>
+          <MainChart />
+          <MainChatBot />
+        </div>
+        <div className={styles.rightSection}>
+          <MainWeather />
+          <MainPopularMenu />
+          <MainUnpopularMenu />
+        </div>
+      </div>
     </div>
   );
 }
