@@ -1,6 +1,7 @@
 import React from "react";
 import { FiCheckCircle } from "react-icons/fi";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styles from "../css/loginPage.module.css";
 
 const dummyUser = {
@@ -8,7 +9,9 @@ const dummyUser = {
   password: "1234",
 };
 
-export default function Landing() {
+const LoginPage = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -23,6 +26,7 @@ export default function Landing() {
       setError("password", { type: "manual", message: "비밀번호가 틀렸습니다." });
     } else {
       alert("로그인 성공!");
+      navigate("/main");
     }
   };
 
@@ -65,7 +69,7 @@ export default function Landing() {
       {/* 우측 로그인 */}
       <section className={styles.right}>
         <div className={styles.formWrap}>
-          <h2 className={styles.formTitle}>로그인</h2>
+          <h2 className={styles.formTitle}>AIGoYa</h2>
           <p className={styles.formDesc}>계정에 로그인하여 매장 관리를 시작하세요</p>
 
           <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -125,3 +129,5 @@ export default function Landing() {
     </main>
   );
 }
+
+export default LoginPage;
