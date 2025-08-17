@@ -3,6 +3,30 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin: 20px auto;
     align-items: center;
+    height: 100vh;
+    max-height: 100%;
+    padding: 20px;
+}
+
+.mainSection {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.leftSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.rightSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
