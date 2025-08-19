@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from './page/mainPage';
 import ChatBotPage from './page/chatBotPage';
 import LoginPage from './page/loginPage';
+import SignUpPage from './page/signUpPage'; 
 
 const App = () => {
   return (
