@@ -1,3 +1,8 @@
+.pageWithHeader {
+  padding-top: 82px;
+  background: #f8f9fa;
+}
+
 .mainContainer {
     background-color: #F8FAFC;
     display: flex;

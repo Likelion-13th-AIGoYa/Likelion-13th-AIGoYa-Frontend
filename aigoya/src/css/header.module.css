@@ -4,12 +4,14 @@
 .headerWrapper {
   position: fixed;
   top: 0;
-  width: 1280px;
+  left: 0;
+  min-width: 1280px;
+  width: 100%;
 }
 
 /* 첫 번째 줄 - 흰색 배경 */
 .headerTop {
-  background: white;
+  background: #F8FAfc;
   border-bottom: 1px solid #e0e0e0;
   height: 50px;
   display: flex;
@@ -215,10 +217,6 @@
   z-index: 1000;
 }
 
-/* 메인 컨텐츠가 헤더에 가려지지 않도록 */
-body {
-  padding-top: 82px; /* 50px + 32px */
-}
 
 /* 반응형 */
 @media (max-width: 768px) {
