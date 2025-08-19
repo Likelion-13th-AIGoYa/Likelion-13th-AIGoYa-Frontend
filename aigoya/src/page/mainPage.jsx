@@ -9,18 +9,20 @@ import Header from '../component/header';
 import Sales from '../component/mainSales';
 const mainPage = () => {
   return (
-    <div className={styles.mainContainer}>
+    <div className={styles.pageWithHeader}>
       <Header />
-      <div className={styles.mainSection}>
-        <div className={styles.leftSection}>
-          <Sales />
-          <MainChart />
-          <MainChatBot />
-        </div>
-        <div className={styles.rightSection}>
-          <MainWeather />
-          <MainPopularMenu />
-          <MainUnpopularMenu />
+      <div className={styles.mainContainer}>
+        <div className={styles.mainSection}>
+          <div className={styles.leftSection}>
+            <Sales />
+            <MainChart />
+            <MainChatBot />
+          </div>
+          <div className={styles.rightSection}>
+            <MainWeather />
+            <MainPopularMenu />
+            <MainUnpopularMenu />
+          </div>
         </div>
       </div>
     </div>
