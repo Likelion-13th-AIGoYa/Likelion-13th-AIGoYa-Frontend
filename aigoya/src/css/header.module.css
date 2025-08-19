@@ -5,7 +5,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 1280px;
   z-index: 1000;
 }
 
@@ -20,8 +20,7 @@
 }
 
 .headerTopContainer {
-  width: 100%;
-  max-width: 1400px;
+  width: 1280px;
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -101,7 +100,7 @@
 
 /* 두 번째 줄 - 파란색 배경 (리뷰 알림) */
 .headerBottom {
-  background: #5B57D1;
+  background: #2754c5;
   height: 32px;
   display: flex;
   align-items: center;
@@ -110,8 +109,7 @@
 }
 
 .notificationContainer {
-  width: 100%;
-  max-width: 1400px;
+  width: 1280px;
   padding: 0 20px;
   display: flex;
   align-items: center;
