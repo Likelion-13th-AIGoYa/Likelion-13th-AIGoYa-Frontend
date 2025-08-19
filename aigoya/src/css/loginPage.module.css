@@ -241,6 +241,15 @@
   text-align: center;
 }
 
+.linkBtn{
+  color: #2f74ff;
+  text-decoration: none;
+  font-size: 14px;
+  border: none;
+  background: none;
+}
+.linkBtn:hover { text-decoration: underline; }
+
 /* 에러 텍스트 스타일 */
 .errorText {
   display: block;
