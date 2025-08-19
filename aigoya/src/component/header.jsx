@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Star } from 'lucide-react';
-import styles from '../css/header.module.css';  // CSS Module import
+import styles from '../css/header.module.css';
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());

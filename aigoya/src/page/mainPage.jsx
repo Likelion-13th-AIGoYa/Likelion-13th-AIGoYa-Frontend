@@ -6,12 +6,14 @@ import MainUnpopularMenu from '../component/mainUnpopularMenu';
 import MainChart from '../component/mainChart';
 import MainChatBot from '../component/mainChatBot';
 import Header from '../component/header';
+import Sales from '../component/mainSales';
 const mainPage = () => {
   return (
     <div className={styles.mainContainer}>
       <Header />
       <div className={styles.mainSection}>
         <div className={styles.leftSection}>
+          <Sales />
           <MainChart />
           <MainChatBot />
         </div>
