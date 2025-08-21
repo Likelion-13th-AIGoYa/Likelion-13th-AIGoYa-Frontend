@@ -48,7 +48,7 @@ export default function SignUpPage({ onDone }) {
 
             const response = await createStore(storeData);
             alert(`회원가입 성공! 가게가 생성되었습니다.`);
-            onDone?.(); // 로그인 화면으로 복귀
+            onDone?.(data.email); // 로그인 화면으로 복귀
         } catch (error) {
             // axios는 HTTP 에러를 자동으로 catch로 처리
             if (error.response) {
@@ -173,7 +173,7 @@ export default function SignUpPage({ onDone }) {
             {/* 로그인 이동 */}
             <p className={styles.helper}>
                 이미 계정이 있나요?{" "}
-                <button type="button" className={styles.linkBtn} onClick={onDone}>로그인</button>
+                <button type="button" className={styles.linkBtn} onClick={() => onDone?.()}>로그인</button>
             </p>
         </form>
     );
