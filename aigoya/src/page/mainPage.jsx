@@ -12,6 +12,8 @@ import Sales from '../component/mainSales';
 const MainPage = () => {   
   const navigate = useNavigate();
 
+  
+
   useEffect(() => {
     const token =
       localStorage.getItem("accessToken") ||
@@ -21,6 +23,8 @@ const MainPage = () => {
       // 토큰 없으면 로그인 페이지로 튕김
       navigate("/", { replace: true });
     }
+
+    
   }, [navigate]);
 
   return (
@@ -37,6 +41,7 @@ const MainPage = () => {
             <MainWeather />
             <MainPopularMenu />
             <MainUnpopularMenu />
+            <button className={`${styles.posMachinePageLink} ${styles.simple}`} onClick={navigateToPosMachine}>포스기 연결</button>
           </div>
         </div>
       </div>
@@ -44,4 +49,4 @@ const MainPage = () => {
   );
 }
 
-export default MainPage;   // ✅ export도 대문자 이름으로
+export default MainPage;
