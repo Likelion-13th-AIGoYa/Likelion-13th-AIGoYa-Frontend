@@ -30,7 +30,7 @@ export const loginStore = async (loginData) => {
         const response = await api.post('/stores/login', loginData);
         return response.data;
     } catch (error) {
-        console.error('로그인 API 호출 오류!!:', error);
+        console.error('로그인 API 호출 오류:', error);
         throw error;
     }
 };
