@@ -27,4 +27,4 @@ jobs:
       with:
         context: ./aigoya/Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/aigoya:latest
+        tags: ghcr.io/likelion-13th-aigoya/frontend:latest
