@@ -29,10 +29,10 @@ const PosMachinePage = () => {
       { id: 4, name: '냉면', price: 8000 },
       { id: 5, name: '비빔면', price: 6500 },
       { id: 6, name: '해물스파', price: 8500 },
-      { id: 7, name: '전치국수', price: 8000 },
+      { id: 7, name: '잔치국수', price: 8000 },
       { id: 8, name: '탕국수', price: 9000 },
       { id: 9, name: '스파게티', price: 12000 },
-      { id: 10, name: '돈연', price: 8500 },
+      { id: 10, name: '돈가스', price: 8500 },
       { id: 11, name: '불닭', price: 2000 },
       { id: 12, name: '', price: null }
     ],
