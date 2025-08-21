@@ -25,6 +25,7 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: ./aigoya/Dockerfile
+        context: .
+        file: ./aigoya/Dockerfile
         push: true
         tags: ghcr.io/likelion-13th-aigoya/frontend:latest
