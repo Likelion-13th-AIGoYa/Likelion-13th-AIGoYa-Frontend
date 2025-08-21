@@ -9,10 +9,12 @@ import MainChatBot from '../component/mainChatBot';
 import Header from '../component/header';
 import Sales from '../component/mainSales';
 
-const MainPage = () => {   
+const MainPage = () => {
   const navigate = useNavigate();
 
-  
+  const navigateToPosMachine = () => {
+    navigate('/posMachine');
+  };
 
   useEffect(() => {
     const token =
@@ -24,7 +26,7 @@ const MainPage = () => {
       navigate("/", { replace: true });
     }
 
-    
+
   }, [navigate]);
 
   return (
