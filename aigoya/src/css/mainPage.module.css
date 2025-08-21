@@ -34,3 +34,61 @@
     gap: 20px;
     width: 100%;
 }
+
+/* 포스기 연결 버튼 스타일 */
+.posMachinePageLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+/* 호버 효과 */
+.posMachinePageLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* 아이콘 추가 (선택사항) */
+.posMachinePageLink::before {
+  content: "🖥️";
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+/* 대안 디자인 1: 심플한 파란색 버튼 */
+.posMachinePageLink.simple {
+  background: #4A90E2;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.posMachinePageLink.simple:hover {
+  background: #357ABD;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .posMachinePageLink {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}

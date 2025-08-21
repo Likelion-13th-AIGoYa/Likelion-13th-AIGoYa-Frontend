@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import styles from '../css/mainPage.module.css';
 import MainWeather from '../component/mainWeather'
 import MainPopularMenu from '../component/mainPopularMenu'
@@ -7,7 +8,17 @@ import MainChart from '../component/mainChart';
 import MainChatBot from '../component/mainChatBot';
 import Header from '../component/header';
 import Sales from '../component/mainSales';
-const mainPage = () => {
+
+
+const MainPage = () => {
+
+
+const navigate = useNavigate();
+const navigateToPosMachine = () => {
+  navigate('/posMachine');
+};
+
+
   return (
     <div className={styles.pageWithHeader}>
       <Header />
@@ -22,6 +33,7 @@ const mainPage = () => {
             <MainWeather />
             <MainPopularMenu />
             <MainUnpopularMenu />
+            <button className={`${styles.posMachinePageLink} ${styles.simple}`} onClick={navigateToPosMachine}>포스기 연결</button>
           </div>
         </div>
       </div>
@@ -29,4 +41,4 @@ const mainPage = () => {
   );
 }
 
-export default mainPage;
+export default MainPage;
