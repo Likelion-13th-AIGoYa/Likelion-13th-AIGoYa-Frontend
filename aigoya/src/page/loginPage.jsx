@@ -11,6 +11,7 @@ const dummyUser = { email: "test@store.com", password: "1234" };
 const LoginPage = () => {
   const navigate = useNavigate();
   const [mode, setMode] = useState("login"); // 로그인 또는 회원가입 상태 관리
+  const [signedUpEmail, setSignedUpEmail] = useState(""); // 회원가입한 이메일 저장
 
   // 방향감 계산
   const prev = useRef(mode);
@@ -27,9 +28,19 @@ const LoginPage = () => {
   };
 
   const {
-    register, handleSubmit,
+    register, handleSubmit, setValue,
     formState: { errors }, setError
   } = useForm();
+
+  // 회원가입 완료 후 로그인 화면으로 복귀하면서 이메일 자동 입력
+  const handleSignUpComplete = (email) => {
+    setSignedUpEmail(email);
+    setMode("login");
+    // 약간의 지연 후 이메일 값 설정 (애니메이션 완료 후)
+    setTimeout(() => {
+      setValue("email", email);
+    }, 300);
+  };
 
   const onSubmit = (data) => {
     if (data.email !== dummyUser.email) {
@@ -94,6 +105,7 @@ const LoginPage = () => {
                       type="email"
                       placeholder="example@store.com"
                       className={styles.input}
+                      defaultValue={signedUpEmail} // 회원가입한 이메일을 기본값으로 설정
                       {...register("email", { required: "이메일을 입력하세요." })}
                     />
                     {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
@@ -138,7 +150,7 @@ const LoginPage = () => {
                   exit="exit"
                 >
                   {/* 회원가입 폼: 완료 시 로그인 화면으로 복귀 */}
-                  <SignUpPage onDone={() => setMode("login")} />
+                  <SignUpPage onDone={handleSignUpComplete} />
                 </motion.div>
               )}
             </AnimatePresence>
