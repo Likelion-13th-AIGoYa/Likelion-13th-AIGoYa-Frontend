@@ -1,7 +1,7 @@
 // src/api/storeApi.js
 import axios from 'axios';
 
-const API_BASE_URL = 'https://aigoya.elroy.kr/v1';
+const API_BASE_URL = 'https://aigoya-api.elroy.kr/v1';
 
 // axios 인스턴스 생성 (옵션)
 const api = axios.create({
