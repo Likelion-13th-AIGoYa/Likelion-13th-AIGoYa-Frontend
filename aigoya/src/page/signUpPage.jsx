@@ -1,6 +1,8 @@
-import React, { useMemo } from "react";
+// src/page/SignUpPage.js
+import React, { useMemo, useState } from "react";
 import styles from "../css/signUpPage.module.css";
 import { useForm } from "react-hook-form";
+import { createStore } from "../api/storeApi";
 
 // 전화번호 포맷팅
 function formatPhone(v) {
@@ -20,6 +22,8 @@ export default function SignUpPage({ onDone }) {
         formState: { errors }
     } = useForm({ mode: "onBlur" });
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const password = watch("password", "");
     const phone = watch("phone", "");
 
@@ -30,13 +34,36 @@ export default function SignUpPage({ onDone }) {
         if (/[a-zA-Z]/.test(password)) score++;
         if (/[0-9]/.test(password)) score++;
         if (/[^A-Za-z0-9]/.test(password)) score++;
-
         return score;
     }, [password]);
 
-    const onSubmit = (data) => {
-        alert("회원가입 성공! 이제 로그인해 보세요.");
-        onDone?.(); // 로그인 화면으로 복귀
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        try {
+            const storeData = {
+                email: data.email,
+                phone: data.phone,
+                password: data.password
+            };
+
+            const response = await createStore(storeData);
+            alert(`회원가입 성공! 가게가 생성되었습니다.`);
+            onDone?.(); // 로그인 화면으로 복귀
+        } catch (error) {
+            // axios는 HTTP 에러를 자동으로 catch로 처리
+            if (error.response) {
+                // 서버에서 응답은 받았지만 에러 상태코드
+                alert(`회원가입 실패: ${error.response.status} - ${error.response.data?.message || '서버 오류'}`);
+            } else if (error.request) {
+                // 요청은 보냈지만 응답을 받지 못함
+                alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
+            } else {
+                // 요청 설정 중 오류
+                alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const onPhoneChange = (e) => {
@@ -75,10 +102,7 @@ export default function SignUpPage({ onDone }) {
                 type="tel"
                 className={styles.input}
                 placeholder="010-1234-5678"
-
-                // 상단의 watch로 현재 입력값을 가져와서 포맷팅
                 value={phone}
-                
                 onChange={onPhoneChange}
                 {...register("phone", {
                     required: "전화번호를 입력하세요.",
@@ -93,16 +117,11 @@ export default function SignUpPage({ onDone }) {
                 id="password"
                 type="password"
                 className={styles.input}
-                placeholder="8자 이상 (영문/숫자/특수문자)"
+                placeholder="비밀번호를 입력하세요"
                 {...register("password", {
-                    required: "비밀번호를 입력하세요.",
-                    validate: v => v.length >= 8 || "8자 이상 입력하세요."
+                    required: "비밀번호를 입력하세요."
                 })}
             />
-            <div className={styles.passwordRequirements}>8자 이상, 영문/숫자/특수문자 포함</div>
-            <div className={styles.strengthIndicator}>
-                <div className={`${styles.strengthBar} ${strengthClass}`} />
-            </div>
             {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}
 
             {/* 비밀번호 확인 */}
@@ -119,6 +138,11 @@ export default function SignUpPage({ onDone }) {
             />
             {errors.confirmPassword && <span className={styles.errorText}>{errors.confirmPassword.message}</span>}
 
+            {/* 비밀번호 강도 표시 */}
+            <div className={styles.passwordRequirements}>8자 이상, 영문/숫자/특수문자 포함</div>
+            <div className={styles.strengthIndicator}>
+                <div className={`${styles.strengthBar} ${strengthClass}`} />
+            </div>
 
             {/* 약관 동의 */}
             <div className={styles.termsCheckbox}>
@@ -142,7 +166,9 @@ export default function SignUpPage({ onDone }) {
             {errors.terms && <span className={styles.errorText}>{errors.terms.message}</span>}
 
             {/* 제출 */}
-            <button className={styles.button} type="submit">회원가입</button>
+            <button className={styles.button} type="submit" disabled={isLoading}>
+                {isLoading ? "회원가입 중..." : "회원가입"}
+            </button>
 
             {/* 로그인 이동 */}
             <p className={styles.helper}>
