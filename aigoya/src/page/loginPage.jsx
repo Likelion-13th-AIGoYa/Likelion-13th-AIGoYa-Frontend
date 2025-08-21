@@ -1,23 +1,40 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FiCheckCircle } from "react-icons/fi";
+import { FiCheckCircle, FiLoader } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/loginPage.module.css";
 import { AnimatePresence, motion } from "framer-motion";
-import SignUpPage from "../page/signUpPage"; 
+import SignUpPage from "../page/signUpPage";
+import { loginStore } from "../api/storeApi";
 
-const dummyUser = { email: "test@store.com", password: "1234" };
+
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState("login"); // 로그인 또는 회원가입 상태 관리
+  const [mode, setMode] = useState("login"); // 로그인 또는 회원가입 상태 관리, 애니메이션 전환에 사용
   const [signedUpEmail, setSignedUpEmail] = useState(""); // 회원가입한 이메일 저장
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
+  // 로그인 상태 체크 , 이미 토큰 있으면 메인으로 리다이렉트
+  useEffect(() => {
+    const token =
+      localStorage.getItem("accessToken") ||
+      sessionStorage.getItem("accessToken");
+
+    if (token) {
+      navigate("/main", { replace: true }); // replace: 뒤로가기 눌러도 로그인 페이지 안 나오게
+    }
+  }, [navigate]);
+
 
   // 방향감 계산
   const prev = useRef(mode);
   const dir =
     prev.current === "login" && mode === "signup" ? "forward" :
-    prev.current === "signup" && mode === "login" ? "backward" : "forward";
+      prev.current === "signup" && mode === "login" ? "backward" : "forward";
   useEffect(() => { prev.current = mode; }, [mode]);
 
   // 애니메이션
@@ -28,9 +45,18 @@ const LoginPage = () => {
   };
 
   const {
-    register, handleSubmit, setValue,
-    formState: { errors }, setError
-  } = useForm();
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    setError,
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      keepLoggedIn: false, // 체크박스 기본값을 false로
+    },
+  });
 
   // 회원가입 완료 후 로그인 화면으로 복귀하면서 이메일 자동 입력
   const handleSignUpComplete = (email) => {
@@ -42,14 +68,34 @@ const LoginPage = () => {
     }, 300);
   };
 
-  const onSubmit = (data) => {
-    if (data.email !== dummyUser.email) {
-      setError("email", { type: "manual", message: "이메일이 존재하지 않습니다." });
-    } else if (data.password !== dummyUser.password) {
-      setError("password", { type: "manual", message: "비밀번호가 틀렸습니다." });
-    } else {
-      alert("로그인 성공!");
+  const onSubmit = async (data) => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      const response = await loginStore(data);
+      
+      if (data.keepLoggedIn) {
+        localStorage.setItem("accessToken", response.accessToken);
+      } else {
+        sessionStorage.setItem("accessToken", response.accessToken);
+      }
+
+
+      console.log("로그인 성공! 서버 응답:", response);
       navigate("/main");
+
+    } catch (error) {
+
+      console.error("로그인 API 오류:", error);
+      setError("password", {
+        type: "manual",
+        message: "이메일 또는 비밀번호가 일치하지 않습니다.",
+      });
+
+    } finally {
+
+      setIsLoading(false);
     }
   };
 
@@ -122,17 +168,27 @@ const LoginPage = () => {
 
                     <div className={styles.row}>
                       <label className={styles.checkbox}>
-                        <input type="checkbox" />
+                        <input type="checkbox" {...register("keepLoggedIn")} />
                         <span>로그인 상태 유지</span>
                       </label>
                       <a className={styles.link} href="#">비밀번호 찾기</a>
                     </div>
 
-                    <button className={styles.button} type="submit">로그인</button>
+
+                    <button className={styles.button} type="submit" disabled={isLoading}>
+                      {isLoading ? (
+                        <div className={styles.loadingState}>
+                          <FiLoader className={styles.spinnerIcon} />
+                          <span>로그인 중...</span>
+                        </div>
+                      ) : (
+                        "로그인"
+                      )}
+                    </button>
 
                     <p className={styles.helper}>
                       아직 계정이 없으신가요?{" "}
-                      {/* a 태그 대신 버튼으로 모드 전환 */}
+
                       <button type="button" className={styles.linkBtn} onClick={() => setMode("signup")}>
                         회원가입
                       </button>

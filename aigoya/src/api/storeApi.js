@@ -22,3 +22,15 @@ export const createStore = async (storeData) => {
         throw error;
     }
 };
+
+
+// 가게 로그인 API
+export const loginStore = async (loginData) => {
+    try {
+        const response = await api.post('/stores/login', loginData);
+        return response.data;
+    } catch (error) {
+        console.error('로그인 API 호출 오류:', error);
+        throw error;
+    }
+};
