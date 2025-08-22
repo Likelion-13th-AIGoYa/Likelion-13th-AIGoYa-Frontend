@@ -12,18 +12,62 @@ const api = axios.create({
     timeout: 10000, // 10초 제한
 });
 
+// 요청 인터셉터 - 모든 요청에 토큰 자동 추가
+api.interceptors.request.use(
+    (config) => {
+        // Local Storage에서 토큰 가져오기
+        const token = localStorage.getItem('accessToken');
+        
+        if (token) {
+            // Authorization 헤더에 토큰 추가
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log('🔑 토큰이 헤더에 추가되었습니다:', token.substring(0, 20) + '...');
+        } else {
+            console.warn('⚠️ 토큰이 없습니다. 로그인이 필요할 수 있습니다.');
+        }
+        
+        return config;
+    },
+    (error) => {
+        console.error('❌ 요청 인터셉터 에러:', error);
+        return Promise.reject(error);
+    }
+);
+
+// 응답 인터셉터 - 토큰 만료 등 에러 처리
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response?.status === 401) {
+            console.warn('🚫 인증 실패 - 토큰이 만료되었거나 유효하지 않습니다.');
+             window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 // 메뉴 목록 불러오기 (내 가게 상품 전체 가져오기)
 export const getMenus = async () => {
   try {
+    console.log('🔄 메뉴 불러오기 요청 시작...');
+    console.log('📡 요청 URL:', `${API_BASE_URL}/stores/me/products`);
+    
     const response = await api.get('/stores/me/products');
+    console.log('✅ API 응답 성공:', response);
+    console.log('📄 응답 데이터:', response.data);
     
     // 서버에서 받은 데이터 (카테고리 없음)
     const menuData = response.data;
     
-    // 로컬스토리지에서 카테고리 매핑 정보 가져오기
-    const categoryMapping = JSON.parse(localStorage.getItem('menuCategoryMapping') || '{}');
+    // 데이터가 배열인지 확인
+    if (!Array.isArray(menuData)) {
+      console.warn('⚠️ 응답 데이터가 배열이 아닙니다:', typeof menuData, menuData);
+      throw new Error('서버 응답 형식이 올바르지 않습니다.');
+    }
     
-    // 카테고리별로 정리된 객체 생성
+    // 카테고리별로 정리된 객체 생성 (모든 메뉴를 밥류에 넣기)
     const categorizedMenus = {
       '밥류': [],
       '국물요리': [],
@@ -32,69 +76,63 @@ export const getMenus = async () => {
       '디저트': []
     };
 
-    // 서버 데이터를 카테고리별로 분류 (로컬 매핑 사용)
-    menuData.forEach(item => {
-      const category = categoryMapping[item.productId] || '밥류'; // 기본값 설정
-      if (categorizedMenus[category]) {
-        categorizedMenus[category].push({
-          id: item.productId,
-          name: item.productName,
-          price: item.price,
-          category: category // 프론트엔드에서 관리하는 카테고리
-        });
-      }
+    // 서버 데이터를 모두 밥류에 넣기
+    menuData.forEach((item, index) => {
+      console.log(`📦 메뉴 항목 ${index + 1}:`, item);
+      
+      categorizedMenus['밥류'].push({
+        id: item.productId,
+        name: item.productName,
+        price: item.price
+      });
     });
-
+    
+    console.log('🎯 최종 변환된 메뉴:', categorizedMenus);
     return categorizedMenus;
   } catch (error) {
-    console.error('메뉴 목록 API 오류:', error);
+    console.error('❌ 메뉴 목록 API 오류:', error);
+    console.error('🔍 에러 상세:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
     throw error;
   }
 };
 
-// 메뉴 추가하기 (카테고리는 로컬에서만 관리)
+// 메뉴 추가하기
 export const addMenu = async (menuData) => {
   try {
+    console.log('🔄 메뉴 추가 요청:', menuData);
+    
     const response = await api.post('/stores/me/products', {
       name: menuData.name,
       price: menuData.price
-      // category는 서버에 보내지 않음
     });
     
-    // 카테고리 매핑을 로컬스토리지에 저장
-    const categoryMapping = JSON.parse(localStorage.getItem('menuCategoryMapping') || '{}');
-    categoryMapping[response.data.productId] = menuData.category;
-    localStorage.setItem('menuCategoryMapping', JSON.stringify(categoryMapping));
-    
-    return {
-      ...response.data,
-      category: menuData.category // 응답에 카테고리 추가
-    };
+    console.log('✅ 메뉴 추가 완료:', response.data);
+    return response.data;
   } catch (error) {
-    console.error('메뉴 추가 API 오류:', error);
+    console.error('❌ 메뉴 추가 API 오류:', error);
     throw error;
   }
 };
 
-// 메뉴 수정하기 (카테고리는 로컬에서만 관리)
+// 메뉴 수정하기
 export const updateMenu = async (productId, menuData) => {
   try {
+    console.log('🔄 메뉴 수정 요청:', productId, menuData);
+    
     const response = await api.put(`/stores/me/products/${productId}`, {
       name: menuData.name,
       price: menuData.price
-      // category는 서버에 보내지 않음
     });
     
-    // 카테고리 매핑 업데이트
-    if (menuData.category) {
-      const categoryMapping = JSON.parse(localStorage.getItem('menuCategoryMapping') || '{}');
-      categoryMapping[productId] = menuData.category;
-      localStorage.setItem('menuCategoryMapping', JSON.stringify(categoryMapping));
-    }
-    
+    console.log('✅ 메뉴 수정 완료:', response.data);
     return response.data;
   } catch (error) {
-    console.error('메뉴 수정 API 오류:', error);
+    console.error('❌ 메뉴 수정 API 오류:', error);
     throw error;
   }
 };
@@ -102,16 +140,14 @@ export const updateMenu = async (productId, menuData) => {
 // 메뉴 삭제하기
 export const deleteMenu = async (productId) => {
   try {
+    console.log('🔄 메뉴 삭제 요청:', productId);
+    
     const response = await api.delete(`/stores/me/products/${productId}`);
     
-    // 로컬 카테고리 매핑에서도 제거
-    const categoryMapping = JSON.parse(localStorage.getItem('menuCategoryMapping') || '{}');
-    delete categoryMapping[productId];
-    localStorage.setItem('menuCategoryMapping', JSON.stringify(categoryMapping));
-    
+    console.log('✅ 메뉴 삭제 완료');
     return response.data;
   } catch (error) {
-    console.error('메뉴 삭제 API 오류:', error);
+    console.error('❌ 메뉴 삭제 API 오류:', error);
     throw error;
   }
 };
@@ -119,10 +155,14 @@ export const deleteMenu = async (productId) => {
 // 특정 메뉴 조회
 export const getMenuById = async (productId) => {
   try {
+    console.log('🔄 메뉴 조회 요청:', productId);
+    
     const response = await api.get(`/stores/me/products/${productId}`);
+    
+    console.log('✅ 메뉴 조회 완료:', response.data);
     return response.data;
   } catch (error) {
-    console.error('메뉴 조회 API 오류:', error);
+    console.error('❌ 메뉴 조회 API 오류:', error);
     throw error;
   }
 };
