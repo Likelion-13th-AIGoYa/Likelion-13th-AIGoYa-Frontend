@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/posMachinePage.module.css';
-import { getMenus, addMenu, deleteMenu, updateMenu } from "../api/productManagementApi";
+import { getMenus, addMenu, deleteMenu, updateMenu } from "../api/storeApi";
 
 const PosMachinePage = ({ storeId = 1 }) => {
   const [selectedCategory, setSelectedCategory] = useState('밥류');
