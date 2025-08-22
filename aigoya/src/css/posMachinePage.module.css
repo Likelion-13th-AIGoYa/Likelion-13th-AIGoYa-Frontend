@@ -1,8 +1,10 @@
-/* posMachinePage.module.css */
-
+/* 기본 컨테이너 - 최소 1280x720, 큰 화면에서는 확장 */
 .posContainer {
     display: flex;
+    min-height: 720px;
     height: 100vh;
+    min-width: 1280px;
+    width: 100vw;
     background: #f5f6fa;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -26,26 +28,28 @@
 
 /* 왼쪽 카테고리 패널 */
 .leftPanel {
-    width: 10%;
+    min-width: 150px;
+    width: 12%;
     background: white;
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 0;
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
 }
 
 .categoryButton {
     width: 100%;
-    height: 12%;
+    padding: min(15px, 2vh) 10px;
     background: white;
     border: none;
-    font-size: 16px;
+    font-size: min(14px, 1.5vh);
     font-weight: 500;
     color: #666;
     cursor: pointer;
     transition: all 0.2s ease;
     border-bottom: 1px solid #e8e8e8;
+    border-radius: 4px;
+    margin-bottom: 5px;
 }
 
 .categoryButton:hover {
@@ -58,14 +62,66 @@
     font-weight: 600;
 }
 
+/* 주문 조회 버튼 섹션 */
+.orderViewSection {
+    margin-top: auto;
+    padding: 15px 0;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.orderViewButton {
+    width: 100%;
+    padding: min(12px, 1.5vh);
+    background: #e8f4fd;
+    border: 1px solid #4A90E2;
+    border-radius: 6px;
+    color: #4A90E2;
+    font-size: min(13px, 1.4vh);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.orderViewButton:hover {
+    background: #4A90E2;
+    color: white;
+}
+
+/* 카테고리 관리 버튼들 */
+.categoryManagement {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.categoryManageButton {
+    width: 100%;
+    padding: min(10px, 1.2vh);
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #666;
+    font-size: min(11px, 1.2vh);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.categoryManageButton:hover {
+    background: #e9ecef;
+    border-color: #999;
+    color: #333;
+}
+
 /* 중앙 메뉴 패널 */
 .centerPanel {
     flex: 1;
-    padding: 0 15px;
+    padding: 15px;
     background: #f5f6fa;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
 /* 메뉴 그리드 */
@@ -83,7 +139,7 @@
 /* 메뉴 카드 */
 .menuCard {
     width: 100%;
-    height: 20vh;
+    height: 17vh;
     background: white;
     border: none;
     border-radius: 8px;
@@ -98,23 +154,13 @@
     transition: all 0.2s ease;
 }
 
-.menuCard:hover:not(.empty) {
+.menuCard:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.menuCard:active:not(.empty) {
-    transform: translateY(0);
-}
-
-.menuCard.empty {
-    background: #f8f9fa;
-    cursor: default;
-    box-shadow: none;
-}
-
 .menuName {
-    font-size: 20px;
+    font-size: min(20px, 2.5vh);
     font-weight: 600;
     color: #333;
     text-align: center;
@@ -122,37 +168,32 @@
 }
 
 .menuPrice {
-    font-size: 16px;
+    font-size: min(18px, 2.2vh);
     color: #4A90E2;
     font-weight: 500;
 }
 
-/* 하단 버튼 래퍼 */
+/* 하단 버튼들 */
 .bottomButtonsWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px 0;
+    padding: 15px 0;
     margin-top: auto;
     border-top: 1px solid #e0e0e0;
 }
 
-/* 하단 버튼들 */
 .bottomButtons {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
 }
 
 .bottomButton {
     flex: 1;
-    min-width: 160px;
-    padding: 20px;
+    padding: min(15px, 2vh);
     background: white;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 6px;
     color: #666;
-    font-size: 16px;
+    font-size: min(14px, 1.6vh);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -163,32 +204,10 @@
     border-color: #999;
 }
 
-/* 주문 조회 버튼 */
-.orderViewButtonWrapper {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.orderViewButton {
-    padding: 8px 16px;
-    background: #e8f4fd;
-    border: 1px solid #4A90E2;
-    border-radius: 6px;
-    color: #4A90E2;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.orderViewButton:hover {
-    background: #4A90E2;
-    color: white;
-}
-
 /* 오른쪽 주문 패널 */
 .rightPanel {
-    width: 380px;
+    min-width: 320px;
+    width: 20%;
     background: white;
     display: flex;
     flex-direction: column;
@@ -215,37 +234,33 @@
 }
 
 .orderTable th {
-    padding: 15px;
-    text-align: left;
-    font-size: 16px;
+    padding: min(12px, 1.5vh);
+    text-align: center;
+    font-size: min(14px, 1.6vh);
     font-weight: 600;
     color: #333;
     border-bottom: 2px solid #e8e8e8;
 }
 
-.orderTable tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-}
-
 .orderTable td {
-    padding: 12px 15px;
-    font-size: 16px;
+    padding: min(10px, 1.2vh) min(12px, 1.5vh);
+    font-size: min(14px, 1.6vh);
 }
 
 .itemInfo {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 16px;
+    gap: 4px;
 }
 
 .itemName {
     font-weight: 500;
     color: #333;
+    font-size: min(14px, 1.6vh);
 }
 
 .itemPrice {
-    font-size: 14px;
+    font-size: min(12px, 1.4vh);
     color: #888;
 }
 
@@ -253,18 +268,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
 }
 
 .qtyButton {
     background: #f0f0f0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
+    width: min(24px, 3vh);
+    height: min(24px, 3vh);
+    font-size: min(14px, 1.6vh);
     cursor: pointer;
     transition: all 0.2s ease;
-    margin: 0 4px;
 }
 
 .qtyButton:hover {
@@ -272,40 +287,40 @@
 }
 
 .qtyValue {
-    display: inline-block;
-    min-width: 30px;
+    min-width: min(24px, 3vh);
     text-align: center;
     font-weight: 600;
+    font-size: min(14px, 1.6vh);
 }
 
 .itemTotal {
     text-align: right;
     font-weight: 500;
     color: #333;
+    font-size: min(14px, 1.6vh);
 }
 
 .deleteButton {
     background: transparent;
     border: none;
     color: #ff4444;
-    font-size: 20px;
-    margin-left: 10px;
+    font-size: min(16px, 1.8vh);
+    margin-left: 8px;
     cursor: pointer;
-    vertical-align: middle;
 }
 
 .deleteButton:hover {
     color: #cc0000;
 }
 
-/* 요약 박스 */
+/* 요약 및 총계 */
 .summaryBox {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: min(12px, 1.5vh) 15px;
     background: #f8f9fa;
-    font-size: 16px;
+    font-size: min(14px, 1.6vh);
     color: #666;
     border-bottom: 1px solid #e8e8e8;
 }
@@ -313,40 +328,38 @@
 .summaryValue {
     font-weight: 600;
     color: #333;
-    font-size: 16px;
 }
 
-/* 총 합계 */
 .totalBox {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     background: white;
     border-bottom: 2px solid #e8e8e8;
 }
 
 .totalBox span:first-child {
-    font-size: 18px;
+    font-size: min(16px, 1.8vh);
     font-weight: 600;
     color: #333;
 }
 
 .totalAmount {
-    font-size: 24px;
+    font-size: min(20px, 2.5vh);
     font-weight: 700;
     color: #4A90E2;
 }
 
 /* 결제 버튼 */
 .payButton {
-    margin: 20px;
-    padding: 20px;
+    margin: 15px;
+    padding: min(18px, 2.2vh);
     background: #4A90E2;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: min(16px, 1.8vh);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -377,13 +390,13 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     min-width: 400px;
-    max-width: 600px;
-    max-height: 80vh;
+    max-width: min(500px, 40vw);
+    max-height: min(600px, 80vh);
     overflow-y: auto;
 }
 
 .modalTitle {
-    font-size: 20px;
+    font-size: min(18px, 2vh);
     font-weight: 600;
     padding: 20px;
     border-bottom: 1px solid #e0e0e0;
@@ -392,41 +405,42 @@
 
 .modalContent {
     padding: 20px;
-    max-height: 60vh;
+    max-height: min(400px, 60vh);
     overflow-y: auto;
 }
 
 .formGroup {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .formGroup label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 6px;
+    font-size: min(14px, 1.6vh);
     font-weight: 500;
     color: #666;
 }
 
 .input {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: min(14px, 1.6vh);
     box-sizing: border-box;
 }
 
 .select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: min(14px, 1.6vh);
     background: white;
+    box-sizing: border-box;
 }
 
-/* 가격 조정 컨테이너 */
+/* 가격 조정 */
 .priceAdjustContainer {
     display: flex;
     align-items: center;
@@ -439,7 +453,7 @@
     border-radius: 4px;
     width: 32px;
     height: 32px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -450,14 +464,14 @@
 
 .priceInput {
     flex: 1;
-    padding: 8px 12px;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     text-align: center;
-    font-size: 14px;
+    font-size: min(14px, 1.6vh);
 }
 
-/* 모달 액션 */
+/* 모달 액션 버튼 */
 .modalActions {
     display: flex;
     gap: 10px;
@@ -467,7 +481,179 @@
 }
 
 .cancelButton {
-    padding: 10px 24px;
+    padding: 10px 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: min(14px, 1.6vh);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.confirmButton {
+    padding: 10px 20px;
+    background: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: min(14px, 1.6vh);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 목록 관련 */
+.menuList {
+    max-height: min(300px, 40vh);
+    overflow-y: auto;
+}
+
+.menuEditItem {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menuEditFields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menuDeleteItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.deleteItemButton {
+    padding: 6px 12px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: min(12px, 1.4vh);
+    cursor: pointer;
+}
+
+.deleteItemButton:hover {
+    background: #cc0000;
+}
+
+/* 주문 완료 모달 */
+.orderCompleteInfo {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.orderCompleteInfo p {
+    margin: 8px 0;
+    font-size: min(14px, 1.6vh);
+}
+
+.orderProductsList {
+    margin-top: 15px;
+    text-align: left;
+}
+
+.orderProductsList h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: min(14px, 1.6vh);
+}
+
+.orderProductItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: min(13px, 1.5vh);
+}
+
+/* 주문 조회 모달 */
+.ordersList {
+    max-height: min(400px, 50vh);
+    overflow-y: auto;
+}
+
+.noOrders {
+    text-align: center;
+    color: #999;
+    padding: 30px 0;
+    font-size: min(14px, 1.6vh);
+}
+
+.orderItem {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 12px;
+    background: #f8f9fa;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.orderId {
+    font-weight: 600;
+    color: #333;
+    font-size: min(14px, 1.6vh);
+}
+
+.orderTotal {
+    font-weight: 600;
+    color: #4A90E2;
+    font-size: min(14px, 1.6vh);
+}
+
+.cancelOrderButton {
+    padding: 4px 8px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: min(11px, 1.3vh);
+    cursor: pointer;
+}
+
+.cancelOrderButton:hover {
+    background: #cc0000;
+}
+
+.orderProducts {
+    padding-top: 8px;
+    border-top: 1px solid #ddd;
+}
+
+.priceAdjustButton:hover {
+    background: #e0e0e0;
+}
+
+.priceInput {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* 모달 액션 버튼 */
+.modalActions {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    justify-content: flex-end;
+}
+
+.cancelButton {
+    padding: 10px 20px;
     background: white;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -477,7 +663,7 @@
 }
 
 .confirmButton {
-    padding: 10px 24px;
+    padding: 10px 20px;
     background: #4A90E2;
     color: white;
     border: none;
@@ -487,16 +673,13 @@
     cursor: pointer;
 }
 
-/* 메뉴 리스트 */
+/* 목록 관련 */
 .menuList {
-    max-height: 400px;
+    max-height: 300px;
     overflow-y: auto;
 }
 
 .menuEditItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 12px;
     border-bottom: 1px solid #f0f0f0;
 }
@@ -505,7 +688,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 1;
 }
 
 .menuDeleteItem {
@@ -537,51 +719,48 @@
 }
 
 .orderCompleteInfo p {
-    margin: 10px 0;
-    font-size: 16px;
+    margin: 8px 0;
+    font-size: 14px;
 }
 
 .orderProductsList {
-    margin-top: 20px;
+    margin-top: 15px;
     text-align: left;
 }
 
 .orderProductsList h4 {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #333;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .orderProductItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 6px 0;
     border-bottom: 1px solid #f0f0f0;
-}
-
-.orderProductItem:last-child {
-    border-bottom: none;
+    font-size: 13px;
 }
 
 /* 주문 조회 모달 */
 .ordersList {
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
 .noOrders {
     text-align: center;
     color: #999;
-    padding: 40px 0;
-    font-size: 16px;
+    padding: 30px 0;
+    font-size: 14px;
 }
 
 .orderItem {
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 12px;
     background: #f8f9fa;
 }
 
@@ -589,30 +768,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .orderId {
     font-weight: 600;
     color: #333;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .orderTotal {
     font-weight: 600;
     color: #4A90E2;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .cancelOrderButton {
-    padding: 4px 12px;
+    padding: 4px 8px;
     background: #ff4444;
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .cancelOrderButton:hover {
@@ -620,7 +798,7 @@
 }
 
 .orderProducts {
-    padding-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid #ddd;
 }
 
@@ -628,7 +806,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 0;
+    padding: 5px 10px;
     color: #666;
-    font-size: 14px;
+    font-size: 12px;
+    white-space: nowrap;
+    min-height: 24px;
 }
