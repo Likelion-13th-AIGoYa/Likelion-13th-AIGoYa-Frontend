@@ -1,46 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../css/posMachinePage.module.css';
+import { getMenus, addMenu, deleteMenu, updateMenu } from "../api/storeApi";
 
-const PosMachinePage = () => {
+const PosMachinePage = ({ storeId = 1 }) => {
   const [selectedCategory, setSelectedCategory] = useState('밥류');
-  const [orderItems, setOrderItems] = useState([]); // 기본값 비움
+  const [orderItems, setOrderItems] = useState([]);
 
   // 모달 상태
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
+  // 로딩 상태
+  const [loading, setLoading] = useState(false);
+  
   // 폼 데이터
   const [newMenuItem, setNewMenuItem] = useState({
     name: '',
-    price: '',
-    category: '밥류'
+    price: ''
   });
 
-  // 카테고리 목록
+  // 수정할 메뉴 임시 저장
+  const [editingMenus, setEditingMenus] = useState({});
+
+  // 카테고리 목록 (화면 표시용)
   const categories = ['밥류', '국물요리', '음료', '주류', '디저트'];
 
-  // 메뉴 아이템
+  // 메뉴 카테고리 현재 밥류만 들어감 수정 필요
   const [menuItems, setMenuItems] = useState({
-    '밥류': [
-      { id: 1, name: '짜장면', price: 6000 },
-      { id: 2, name: '짬뽕', price: 7000 },
-      { id: 3, name: '우동', price: 5500 },
-      { id: 4, name: '냉면', price: 8000 },
-      { id: 5, name: '비빔면', price: 6500 },
-      { id: 6, name: '해물스파', price: 8500 },
-      { id: 7, name: '잔치국수', price: 8000 },
-      { id: 8, name: '탕국수', price: 9000 },
-      { id: 9, name: '스파게티', price: 12000 },
-      { id: 10, name: '돈가스', price: 8500 },
-      { id: 11, name: '불닭', price: 2000 },
-      { id: 12, name: '', price: null }
-    ],
+    '밥류': [],
     '국물요리': [],
     '음료': [],
     '주류': [],
     '디저트': []
   });
+
+  // ===== 서버에서 메뉴 불러오기 =====
+  useEffect(() => {
+    const fetchMenus = async () => {
+      try {
+        setLoading(true);
+        const data = await getMenus(); // 모든 메뉴가 밥류로 들어옴
+        setMenuItems(data);
+      } catch (error) {
+        console.error("메뉴 불러오기 실패:", error);
+        alert("메뉴를 불러오는데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMenus();
+  }, []);
 
   // 합계 계산
   const calculateTotal = () => {
@@ -60,7 +70,7 @@ const PosMachinePage = () => {
       ));
     } else {
       setOrderItems([...orderItems, {
-        id: Date.now(),
+        id: item.id,
         name: item.name,
         price: item.price,
         quantity: 1,
@@ -92,30 +102,112 @@ const PosMachinePage = () => {
     setOrderItems(orderItems.filter(item => item.id !== id));
   };
 
-  // 메뉴 추가
-  const handleAddMenu = () => {
+  // 메뉴 추가 함수 (모든 메뉴를 밥류에 추가)
+  const handleAddMenu = async () => {
     if (newMenuItem.name && newMenuItem.price) {
-      const newId = Date.now();
-      const updatedMenuItems = { ...menuItems };
-      updatedMenuItems[newMenuItem.category] = [
-        ...updatedMenuItems[newMenuItem.category],
-        {
-          id: newId,
+      try {
+        setLoading(true);
+        console.log("추가 요청:", newMenuItem);
+
+        const addedMenu = await addMenu({
           name: newMenuItem.name,
           price: parseInt(newMenuItem.price)
-        }
-      ];
-      setMenuItems(updatedMenuItems);
-      setNewMenuItem({ name: '', price: '', category: '밥류' });
-      setShowAddModal(false);
+        });
+
+        console.log("서버 응답:", addedMenu);
+
+        // 모든 새 메뉴를 밥류에 추가
+        const updatedMenuItems = { ...menuItems };
+        updatedMenuItems['밥류'] = [
+          ...(updatedMenuItems['밥류'] || []),
+          {
+            id: addedMenu.productId,
+            name: addedMenu.productName,
+            price: addedMenu.price
+          }
+        ];
+
+        setMenuItems(updatedMenuItems);
+        setNewMenuItem({ name: '', price: '' });
+        setShowAddModal(false);
+        
+        alert("메뉴가 성공적으로 추가되었습니다!");
+      } catch (error) {
+        console.error("메뉴 추가 실패:", error);
+        alert("메뉴 추가에 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  // 메뉴 삭제
-  const handleDeleteMenu = (itemId, category) => {
-    const updatedMenuItems = { ...menuItems };
-    updatedMenuItems[category] = updatedMenuItems[category].filter(item => item.id !== itemId);
-    setMenuItems(updatedMenuItems);
+  // 메뉴 삭제 (밥류에서만 삭제)
+  const handleDeleteMenu = async (itemId) => {
+    if (!window.confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await deleteMenu(itemId);
+      
+      // 밥류에서 해당 메뉴 제거
+      const updatedMenuItems = { ...menuItems };
+      updatedMenuItems['밥류'] = updatedMenuItems['밥류'].filter(item => item.id !== itemId);
+      setMenuItems(updatedMenuItems);
+      
+      alert("메뉴가 성공적으로 삭제되었습니다!");
+    } catch (error) {
+      console.error("메뉴 삭제 실패:", error);
+      alert("메뉴 삭제에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 메뉴 수정 초기화 (밥류 메뉴만)
+  const initializeEditMenus = () => {
+    const currentMenus = {};
+    menuItems['밥류']?.forEach(item => {
+      if (item.name) {
+        currentMenus[item.id] = {
+          name: item.name,
+          price: item.price
+        };
+      }
+    });
+    setEditingMenus(currentMenus);
+  };
+
+  // 메뉴 수정 적용
+  const handleUpdateMenus = async () => {
+    try {
+      setLoading(true);
+      
+      const updatePromises = Object.entries(editingMenus).map(([itemId, menuData]) =>
+        updateMenu(itemId, menuData)
+      );
+      
+      await Promise.all(updatePromises);
+      
+      // 메뉴 목록 다시 불러오기
+      const updatedData = await getMenus();
+      setMenuItems(updatedData);
+      
+      setShowEditModal(false);
+      alert("메뉴가 성공적으로 수정되었습니다!");
+    } catch (error) {
+      console.error("메뉴 수정 실패:", error);
+      alert("메뉴 수정에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 수정 모달 열기
+  const openEditModal = () => {
+    initializeEditMenus();
+    setShowEditModal(true);
   };
 
   // 가격 조정 (100원 단위)
@@ -125,8 +217,26 @@ const PosMachinePage = () => {
     setNewMenuItem({ ...newMenuItem, price: newPrice.toString() });
   };
 
+  // 수정 중인 메뉴의 가격 조정
+  const adjustEditPrice = (itemId, value) => {
+    setEditingMenus(prev => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        price: Math.max(0, (prev[itemId]?.price || 0) + value)
+      }
+    }));
+  };
+
   return (
     <div className={styles.posContainer}>
+      {/* 로딩 오버레이 */}
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          처리 중...
+        </div>
+      )}
+
       {/* 왼쪽 카테고리 */}
       <div className={styles.leftPanel}>
         {categories.map((category) => (
@@ -143,7 +253,7 @@ const PosMachinePage = () => {
       {/* 중앙 메뉴 */}
       <div className={styles.centerPanel}>
         <div className={styles.menuGrid}>
-          {menuItems[selectedCategory].map((item) => (
+          {menuItems[selectedCategory]?.map((item) => (
             <button
               key={item.id}
               className={`${styles.menuCard} ${!item.name ? styles.empty : ''}`}
@@ -154,11 +264,15 @@ const PosMachinePage = () => {
                 <>
                   <div className={styles.menuName}>{item.name}</div>
                   <div className={styles.menuPrice}>
-                    {item.price?.toLocaleString()}
+                    {item.price?.toLocaleString()}원
                   </div>
                 </>
               )}
             </button>
+          ))}
+          {/* 빈 카드들 (디자인용) */}
+          {Array.from({ length: Math.max(0, 12 - (menuItems[selectedCategory]?.length || 0)) }).map((_, index) => (
+            <div key={`empty-${index}`} className={`${styles.menuCard} ${styles.empty}`}></div>
           ))}
         </div>
         
@@ -168,7 +282,7 @@ const PosMachinePage = () => {
             <button className={styles.bottomButton} onClick={() => setShowAddModal(true)}>
               메뉴 추가
             </button>
-            <button className={styles.bottomButton} onClick={() => setShowEditModal(true)}>
+            <button className={styles.bottomButton} onClick={openEditModal}>
               메뉴 가격 수정
             </button>
             <button className={styles.bottomButton} onClick={() => setShowDeleteModal(true)}>
@@ -195,7 +309,7 @@ const PosMachinePage = () => {
                   <td>
                     <div className={styles.itemInfo}>
                       <span className={styles.itemName}>{item.name}</span>
-                      <span className={styles.itemPrice}>{item.price.toLocaleString()}</span>
+                      <span className={styles.itemPrice}>{item.price.toLocaleString()}원</span>
                     </div>
                   </td>
                   <td className={styles.quantity}>
@@ -204,7 +318,7 @@ const PosMachinePage = () => {
                     <button className={styles.qtyButton} onClick={() => increaseQuantity(item.id)}>+</button>
                   </td>
                   <td className={styles.itemTotal}>
-                    {item.total.toLocaleString()}
+                    {item.total.toLocaleString()}원
                     <button
                       className={styles.deleteButton}
                       onClick={() => removeOrderItem(item.id)}
@@ -229,11 +343,13 @@ const PosMachinePage = () => {
         <div className={styles.totalBox}>
           <span>총 합계</span>
           <span className={styles.totalAmount}>
-            {calculateTotal().toLocaleString()}
+            {calculateTotal().toLocaleString()}원
           </span>
         </div>
 
-        <button className={styles.payButton}>결제하기</button>
+        <button className={styles.payButton} onClick={() => alert("아직 API 연결되지 않음")}>
+          결제하기 (준비중)
+        </button>
       </div>
 
       {/* 메뉴 추가 모달 */}
@@ -279,18 +395,6 @@ const PosMachinePage = () => {
                   </button>
                 </div>
               </div>
-              <div className={styles.formGroup}>
-                <label>카테고리</label>
-                <select
-                  value={newMenuItem.category}
-                  onChange={(e) => setNewMenuItem({...newMenuItem, category: e.target.value})}
-                  className={styles.select}
-                >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
             </div>
             <div className={styles.modalActions}>
               <button className={styles.cancelButton} onClick={() => setShowAddModal(false)}>
@@ -309,50 +413,45 @@ const PosMachinePage = () => {
         <>
           <div className={styles.modalOverlay} onClick={() => setShowEditModal(false)} />
           <div className={styles.modal}>
-            <h2 className={styles.modalTitle}>메뉴 가격 수정</h2>
+            <h2 className={styles.modalTitle}>메뉴 수정</h2>
             <div className={styles.modalContent}>
               <div className={styles.menuList}>
-                {menuItems[selectedCategory].map(item => 
-                  item.name && (
+                {menuItems['밥류']?.map(item => 
+                  item.name && editingMenus[item.id] && (
                     <div key={item.id} className={styles.menuEditItem}>
-                      <span>{item.name}</span>
-                      <div className={styles.priceAdjustContainer}>
-                        <button
-                          className={styles.priceAdjustButton}
-                          onClick={() => {
-                            const updatedMenuItems = { ...menuItems };
-                            updatedMenuItems[selectedCategory] = updatedMenuItems[selectedCategory].map(menu =>
-                              menu.id === item.id ? { ...menu, price: Math.max(0, menu.price - 100) } : menu
-                            );
-                            setMenuItems(updatedMenuItems);
-                          }}
-                        >
-                          -
-                        </button>
+                      <div className={styles.menuEditFields}>
                         <input
-                          type="number"
-                          value={item.price}
-                          onChange={(e) => {
-                            const updatedMenuItems = { ...menuItems };
-                            updatedMenuItems[selectedCategory] = updatedMenuItems[selectedCategory].map(menu =>
-                              menu.id === item.id ? { ...menu, price: parseInt(e.target.value) || 0 } : menu
-                            );
-                            setMenuItems(updatedMenuItems);
-                          }}
-                          className={styles.priceInput}
+                          type="text"
+                          value={editingMenus[item.id]?.name || ''}
+                          onChange={(e) => setEditingMenus(prev => ({
+                            ...prev,
+                            [item.id]: { ...prev[item.id], name: e.target.value }
+                          }))}
+                          className={styles.input}
                         />
-                        <button
-                          className={styles.priceAdjustButton}
-                          onClick={() => {
-                            const updatedMenuItems = { ...menuItems };
-                            updatedMenuItems[selectedCategory] = updatedMenuItems[selectedCategory].map(menu =>
-                              menu.id === item.id ? { ...menu, price: menu.price + 100 } : menu
-                            );
-                            setMenuItems(updatedMenuItems);
-                          }}
-                        >
-                          +
-                        </button>
+                        <div className={styles.priceAdjustContainer}>
+                          <button
+                            className={styles.priceAdjustButton}
+                            onClick={() => adjustEditPrice(item.id, -100)}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            value={editingMenus[item.id]?.price || 0}
+                            onChange={(e) => setEditingMenus(prev => ({
+                              ...prev,
+                              [item.id]: { ...prev[item.id], price: parseInt(e.target.value) || 0 }
+                            }))}
+                            className={styles.priceInput}
+                          />
+                          <button
+                            className={styles.priceAdjustButton}
+                            onClick={() => adjustEditPrice(item.id, 100)}
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )
@@ -360,8 +459,11 @@ const PosMachinePage = () => {
               </div>
             </div>
             <div className={styles.modalActions}>
-              <button className={styles.confirmButton} onClick={() => setShowEditModal(false)}>
-                완료
+              <button className={styles.cancelButton} onClick={() => setShowEditModal(false)}>
+                취소
+              </button>
+              <button className={styles.confirmButton} onClick={handleUpdateMenus}>
+                수정 완료
               </button>
             </div>
           </div>
@@ -376,13 +478,13 @@ const PosMachinePage = () => {
             <h2 className={styles.modalTitle}>메뉴 삭제</h2>
             <div className={styles.modalContent}>
               <div className={styles.menuList}>
-                {menuItems[selectedCategory].map(item => 
+                {menuItems['밥류']?.map(item => 
                   item.name && (
                     <div key={item.id} className={styles.menuDeleteItem}>
                       <span>{item.name} - {item.price?.toLocaleString()}원</span>
                       <button
                         className={styles.deleteItemButton}
-                        onClick={() => handleDeleteMenu(item.id, selectedCategory)}
+                        onClick={() => handleDeleteMenu(item.id)}
                       >
                         삭제
                       </button>

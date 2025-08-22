@@ -1,9 +1,9 @@
-// src/api/storeApi.js
+// src/api/productManagementApi.js
 import axios from 'axios';
 
 const API_BASE_URL = 'https://aigoya-api.elroy.kr/v1';
 
-// axios 인스턴스 생성 (옵션)
+// axios 인스턴스 생성
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -11,29 +11,6 @@ const api = axios.create({
     },
     timeout: 10000, // 10초 타임아웃
 });
-
-// 가게 생성(회원가입) API
-export const createStore = async (storeData) => {
-    try {
-        const response = await api.post('/stores/create', storeData);
-        return response.data;
-    } catch (error) {
-        console.error('가게 생성 API 호출 오류:', error);
-        throw error;
-    }
-};
-
-
-// 가게 로그인 API
-export const loginStore = async (loginData) => {
-    try {
-        const response = await api.post('/stores/login', loginData);
-        return response.data;
-    } catch (error) {
-        console.error('로그인 API 호출 오류:', error);
-        throw error;
-    }
-};
 
 // 요청 인터셉터 - 모든 요청에 토큰 자동 추가
 api.interceptors.request.use(

@@ -1,10 +1,27 @@
-/* posPage.module.css */
+/* posMachinePage.module.css */
 
 .posContainer {
     display: flex;
     height: 100vh;
     background: #f5f6fa;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* 로딩 오버레이 */
+.loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 /* 왼쪽 카테고리 패널 */
@@ -113,7 +130,8 @@
 /* 하단 버튼 래퍼 */
 .bottomButtonsWrapper {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
     padding: 20px 0;
     margin-top: auto;
     border-top: 1px solid #e0e0e0;
@@ -143,6 +161,29 @@
 .bottomButton:hover {
     background: #f0f0f0;
     border-color: #999;
+}
+
+/* 주문 조회 버튼 */
+.orderViewButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.orderViewButton {
+    padding: 8px 16px;
+    background: #e8f4fd;
+    border: 1px solid #4A90E2;
+    border-radius: 6px;
+    color: #4A90E2;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.orderViewButton:hover {
+    background: #4A90E2;
+    color: white;
 }
 
 /* 오른쪽 주문 패널 */
@@ -336,7 +377,9 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     min-width: 400px;
-    max-width: 500px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modalTitle {
@@ -349,6 +392,8 @@
 
 .modalContent {
     padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
 }
 
 .formGroup {
@@ -369,6 +414,7 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .select {
@@ -447,7 +493,21 @@
     overflow-y: auto;
 }
 
-.menuEditItem,
+.menuEditItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menuEditFields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
 .menuDeleteItem {
     display: flex;
     justify-content: space-between;
@@ -468,4 +528,107 @@
 
 .deleteItemButton:hover {
     background: #cc0000;
+}
+
+/* 주문 완료 모달 */
+.orderCompleteInfo {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.orderCompleteInfo p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.orderProductsList {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.orderProductsList h4 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+}
+
+.orderProductItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.orderProductItem:last-child {
+    border-bottom: none;
+}
+
+/* 주문 조회 모달 */
+.ordersList {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.noOrders {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+    font-size: 16px;
+}
+
+.orderItem {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.orderId {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.orderTotal {
+    font-weight: 600;
+    color: #4A90E2;
+    font-size: 16px;
+}
+
+.cancelOrderButton {
+    padding: 4px 12px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancelOrderButton:hover {
+    background: #cc0000;
+}
+
+.orderProducts {
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.orderProductDetail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    color: #666;
+    font-size: 14px;
 }
