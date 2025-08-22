@@ -16,7 +16,7 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         // Local Storage에서 토큰 가져오기
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
         
         if (token) {
             // Authorization 헤더에 토큰 추가
@@ -52,7 +52,7 @@ api.interceptors.response.use(
 export const getMenus = async () => {
   try {
     console.log('🔄 메뉴 불러오기 요청 시작...');
-    console.log('📡 요청 URL:', `${API_BASE_URL}/stores/me/products`);
+    console.log('📡 요청 URL:', `/stores/me/products`);
     
     const response = await api.get('/stores/me/products');
     console.log('✅ API 응답 성공:', response);

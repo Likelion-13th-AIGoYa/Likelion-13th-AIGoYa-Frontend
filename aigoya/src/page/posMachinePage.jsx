@@ -26,7 +26,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
   // 카테고리 목록 (화면 표시용)
   const categories = ['밥류', '국물요리', '음료', '주류', '디저트'];
 
-  // 메뉴 아이템 (실제로는 모든 메뉴가 밥류에만 들어감)
+  // 메뉴 카테고리 현재 밥류만 들어감 수정 필요
   const [menuItems, setMenuItems] = useState({
     '밥류': [],
     '국물요리': [],
