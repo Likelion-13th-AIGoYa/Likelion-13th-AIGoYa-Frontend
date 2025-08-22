@@ -1,7 +1,7 @@
 // src/api/productManagementApi.js
 import axios from 'axios';
 
-const API_BASE_URL = 'https://aigoya.elroy.kr/v1';
+const API_BASE_URL = 'https://aigoya-api.elroy.kr/v1';
 
 // axios 인스턴스 생성
 const api = axios.create({
@@ -9,7 +9,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000, // 10초 제한
+    timeout: 10000, // 10초 타임아웃
 });
 
 // 요청 인터셉터 - 모든 요청에 토큰 자동 추가
@@ -67,7 +67,7 @@ export const getMenus = async () => {
       throw new Error('서버 응답 형식이 올바르지 않습니다.');
     }
     
-    // 카테고리별로 정리된 객체 생성 (모든 메뉴를 밥류에 넣기)
+    // 카테고리별로 나누기 현재는 밥류로 모두 넣음
     const categorizedMenus = {
       '밥류': [],
       '국물요리': [],

@@ -347,7 +347,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
           </span>
         </div>
 
-        <button className={styles.payButton} onClick={() => alert("주문 기능은 준비 중입니다!")}>
+        <button className={styles.payButton} onClick={() => alert("아직 API 연결되지 않음")}>
           결제하기 (준비중)
         </button>
       </div>
