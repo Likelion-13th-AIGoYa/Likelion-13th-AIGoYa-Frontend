@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Star } from 'lucide-react';
 import styles from '../css/header.module.css';
+import { useNavigate } from "react-router-dom";
+
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("storeId");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("storeId");
+
+    navigate("/", { replace: true });
+  };
 
   // 시간 업데이트
   useEffect(() => {
@@ -17,7 +29,7 @@ const Header = () => {
   const formatTime = (date) => {
     return date.toLocaleString('ko-KR', {
       year: 'numeric',
-      month: '2-digit', 
+      month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
@@ -28,13 +40,13 @@ const Header = () => {
     <>
       {/* 헤더 컨테이너 - 두 줄 포함 */}
       <div className={styles.headerWrapper}>
-        
+
         {/* 첫 번째 줄 - 흰색 배경 */}
         <header className={styles.headerTop}>
           <div className={styles.headerTopContainer}>
             {/* 왼쪽: 메뉴 버튼과 로고 */}
             <div className={styles.leftSection}>
-              <button 
+              <button
                 className={styles.menuButton}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="메뉴"
@@ -85,7 +97,7 @@ const Header = () => {
       <div className={`${styles.sideMenu} ${isMenuOpen ? styles.open : ''}`}>
         <div className={styles.menuHeader}>
           <h2>메뉴</h2>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={() => setIsMenuOpen(false)}
             aria-label="메뉴 닫기"
@@ -102,12 +114,15 @@ const Header = () => {
           <div className={styles.menuItem}>재고 관리</div>
           <div className={styles.menuItem}>직원 관리</div>
           <div className={styles.menuItem}>설정</div>
+
+          <div className={styles.menuItem} onClick={handleLogout}> 로그아웃 </div>
+          
         </nav>
       </div>
 
       {/* 메뉴 열렸을 때 배경 오버레이 */}
       {isMenuOpen && (
-        <div 
+        <div
           className={styles.overlay}
           onClick={() => setIsMenuOpen(false)}
         />
