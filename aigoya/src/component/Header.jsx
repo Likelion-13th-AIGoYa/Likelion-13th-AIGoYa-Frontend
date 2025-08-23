@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Star, BarChart3 } from 'lucide-react';
-import styles from '../css/header.module.css';
+import styles from '../css/Header.module.css';
 import { useNavigate } from "react-router-dom";
 import SideBar from './SideBar';
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../css/posMachinePage.module.css';
+import styles from '../css/PosMachinePage.module.css';
 import {
   getMenus, addMenu, deleteMenu, updateMenu,
   createOrder, getOrders, updateOrder, cancelOrder,
   getCategories, createCategory, updateCategory, deleteCategory
-} from "../api/storeApi";
+} from "../api/StoreApi";
 
 const PosMachinePage = ({ storeId = 1 }) => {
   // 기본 상태

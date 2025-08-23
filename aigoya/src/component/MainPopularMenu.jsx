@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../css/mainPopularMenu.module.css";
+import styles from "../css/MainPopularMenu.module.css";
 
 const popularMenus = [
   { id: 1, name: "김치찌개", subtitle: "우리 집 시그니처 메뉴!", sales: 23 },

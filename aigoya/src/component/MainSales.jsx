@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Receipt, Target } from 'lucide-react';
-import styles from '../css/mainSales.module.css';
+import styles from '../css/MainSales.module.css';
 
 const MainSales = () => {
   // TODO: 백엔드 API에서 받아올 데이터

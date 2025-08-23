@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styles from "../css/MyPagePassword.module.css";
-import { changeMyPassword } from "../api/storeApi";
+import { changeMyPassword } from "../api/StoreApi";
 
 export default function MyPagePassword({ storeId, onCancel, onDone }) {
   const {

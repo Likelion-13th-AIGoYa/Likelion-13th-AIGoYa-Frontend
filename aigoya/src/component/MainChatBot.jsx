@@ -1,7 +1,7 @@
 // components/mainChatBot.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from '../css/mainChatBot.module.css';
+import styles from '../css/MainChatBot.module.css';
 
 const MainChatBot = () => {
     const [inputValue, setInputValue] = useState("");

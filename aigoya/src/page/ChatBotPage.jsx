@@ -1,7 +1,7 @@
 // pages/chatBotPage.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from '../css/chatBotPage.module.css';
+import styles from '../css/ChatBotPage.module.css';
 
 const defaultSuggestions = [
     "오늘 매출 요약 보여줘",

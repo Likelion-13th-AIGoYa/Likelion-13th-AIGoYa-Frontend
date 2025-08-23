@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyStore, deleteMyStore } from "../api/storeApi";
+import { getMyStore, deleteMyStore } from "../api/StoreApi";
 import styles from "../css/MyPage.module.css";
-import Header from "../component/header";
+import Header from "../component/Header";
 import MyPageEdit from "../component/MyPageEdit";
 import MyPageProfileView from "../component/MyPageProfileView";
 import MyPagePassword from "../component/MyPagePassword"; 

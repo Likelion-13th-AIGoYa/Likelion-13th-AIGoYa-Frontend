@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import styles from '../css/mainChart.module.css';
+import styles from '../css/MainChart.module.css';
 
 const MainChart = () => {
     const chartRef = useRef(null);
