@@ -5,6 +5,9 @@ import MainPage from './page/mainPage';
 import ChatBotPage from './page/chatBotPage';
 import LoginPage from './page/loginPage';
 import PosMachinePage from './page/posMachinePage';
+import MyPage from './page/MyPage';
+import MyPageEdit from './component/MyPageEdit';
+
 
 const App = () => {
   return (
@@ -15,6 +18,9 @@ const App = () => {
           <Route path="/main" element={<MainPage />} />
           <Route path="/chatbot" element={<ChatBotPage />} />
           <Route path="/posMachine" element={<PosMachinePage />} />
+          <Route path="/main/mypage" element={<MyPage />} />
+          
+          
         </Routes>
       </BrowserRouter>
     </div>

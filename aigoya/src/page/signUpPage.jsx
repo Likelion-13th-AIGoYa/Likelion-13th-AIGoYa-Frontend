@@ -1,4 +1,3 @@
-// src/page/SignUpPage.js
 import React, { useMemo, useState } from "react";
 import styles from "../css/signUpPage.module.css";
 import { useForm } from "react-hook-form";
@@ -27,7 +26,6 @@ export default function SignUpPage({ onDone }) {
     const password = watch("password", "");
     const phone = watch("phone", "");
 
-    // 비밀번호 강도 계산
     const pwStrength = useMemo(() => {
         let score = 0;
         if (password.length >= 8) score++;
@@ -48,17 +46,13 @@ export default function SignUpPage({ onDone }) {
 
             const response = await createStore(storeData);
             alert(`회원가입 성공! 가게가 생성되었습니다.`);
-            onDone?.(data.email); // 로그인 화면으로 복귀
+            onDone?.(data.email);
         } catch (error) {
-            // axios는 HTTP 에러를 자동으로 catch로 처리
             if (error.response) {
-                // 서버에서 응답은 받았지만 에러 상태코드
                 alert(`회원가입 실패: ${error.response.status} - ${error.response.data?.message || '서버 오류'}`);
             } else if (error.request) {
-                // 요청은 보냈지만 응답을 받지 못함
                 alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
             } else {
-                // 요청 설정 중 오류
                 alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
             }
         } finally {
@@ -70,7 +64,6 @@ export default function SignUpPage({ onDone }) {
         setValue("phone", formatPhone(e.target.value), { shouldDirty: true });
     };
 
-    // 비밀번호 강도 체크
     const strengthClass =
         pwStrength === 0 ? styles.strengthNone :
             pwStrength === 1 ? styles.strengthWeak :
@@ -80,7 +73,6 @@ export default function SignUpPage({ onDone }) {
 
     return (
         <form className={styles.app} onSubmit={handleSubmit(onSubmit)} noValidate>
-
             {/* 이메일 */}
             <label className={styles.label} htmlFor="email">이메일</label>
             <input

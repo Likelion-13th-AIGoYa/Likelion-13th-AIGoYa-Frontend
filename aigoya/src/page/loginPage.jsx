@@ -7,28 +7,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import SignUpPage from "../page/signUpPage";
 import { loginStore } from "../api/storeApi";
 
-
-
-
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState("login"); // 로그인 또는 회원가입 상태 관리, 애니메이션 전환에 사용
-  const [signedUpEmail, setSignedUpEmail] = useState(""); // 회원가입한 이메일 저장
+  const [mode, setMode] = useState("login"); 
+  const [signedUpEmail, setSignedUpEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
-
-  // 로그인 상태 체크 , 이미 토큰 있으면 메인으로 리다이렉트
   useEffect(() => {
     const token =
       localStorage.getItem("accessToken") ||
       sessionStorage.getItem("accessToken");
 
     if (token) {
-      navigate("/main", { replace: true }); // replace: 뒤로가기 눌러도 로그인 페이지 안 나오게
+      navigate("/main", { replace: true }); 
     }
   }, [navigate]);
-
 
   // 방향감 계산
   const prev = useRef(mode);
@@ -54,15 +47,13 @@ const LoginPage = () => {
     defaultValues: {
       email: "",
       password: "",
-      keepLoggedIn: false, // 체크박스 기본값을 false로
+      keepLoggedIn: false,
     },
   });
 
-  // 회원가입 완료 후 로그인 화면으로 복귀하면서 이메일 자동 입력
   const handleSignUpComplete = (email) => {
     setSignedUpEmail(email);
     setMode("login");
-    // 약간의 지연 후 이메일 값 설정 (애니메이션 완료 후)
     setTimeout(() => {
       setValue("email", email);
     }, 300);
@@ -74,19 +65,16 @@ const LoginPage = () => {
 
     try {
       const response = await loginStore(data);
-      
       if (data.keepLoggedIn) {
         localStorage.setItem("accessToken", response.accessToken);
       } else {
         sessionStorage.setItem("accessToken", response.accessToken);
       }
 
-
       console.log("로그인 성공! 서버 응답:", response);
       navigate("/main");
 
     } catch (error) {
-
       console.error("로그인 API 오류:", error);
       setError("password", {
         type: "manual",
@@ -94,7 +82,6 @@ const LoginPage = () => {
       });
 
     } finally {
-
       setIsLoading(false);
     }
   };
@@ -123,7 +110,6 @@ const LoginPage = () => {
         </div>
       </section>
 
-      {/* 우측 카드 */}
       <section className={styles.right}>
         <div className={styles.formWrap}>
           <h2 className={styles.formTitle}>AIGoYa</h2>
@@ -131,7 +117,6 @@ const LoginPage = () => {
             {mode === "login" ? "계정에 로그인하여 매장 관리를 시작하세요" : "새 계정을 만들고 바로 시작하세요"}
           </p>
 
-          {/* 여기만 애니메이션 교체 */}
           <div className={styles.viewSlot}>
             <AnimatePresence mode="wait" custom={dir}>
               {mode === "login" ? (
@@ -151,7 +136,7 @@ const LoginPage = () => {
                       type="email"
                       placeholder="example@store.com"
                       className={styles.input}
-                      defaultValue={signedUpEmail} // 회원가입한 이메일을 기본값으로 설정
+                      defaultValue={signedUpEmail} 
                       {...register("email", { required: "이메일을 입력하세요." })}
                     />
                     {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
@@ -205,7 +190,6 @@ const LoginPage = () => {
                   animate="center"
                   exit="exit"
                 >
-                  {/* 회원가입 폼: 완료 시 로그인 화면으로 복귀 */}
                   <SignUpPage onDone={handleSignUpComplete} />
                 </motion.div>
               )}

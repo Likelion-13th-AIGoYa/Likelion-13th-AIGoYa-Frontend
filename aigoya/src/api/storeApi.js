@@ -12,6 +12,44 @@ const api = axios.create({
     timeout: 10000, // 10초 타임아웃
 });
 
+// 요청 인터셉터
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+        
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log('🔑 토큰이 헤더에 추가되었습니다:', token.substring(0, 20) + '...');
+        } else {
+            console.warn('⚠️ 토큰이 없습니다. 로그인이 필요할 수 있습니다.');
+        }
+        
+        return config;
+    },
+    (error) => {
+        console.error('❌ 요청 인터셉터 에러:', error);
+        return Promise.reject(error);
+    }
+);
+
+// 응답 인터셉터 - 토큰 만료 등 에러 처리
+api.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    const status = error.response?.status;
+    if (status === 401) {
+      
+      localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("accessToken");
+      
+      if (window.location.pathname !== "/") {
+        window.location.replace("/");
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // 가게 생성(회원가입) API
 export const createStore = async (storeData) => {
     try {
@@ -35,41 +73,78 @@ export const loginStore = async (loginData) => {
     }
 };
 
-// 요청 인터셉터 - 모든 요청에 토큰 자동 추가
-api.interceptors.request.use(
-    (config) => {
-        // Local Storage에서 토큰 가져오기
-        const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
-        
-        if (token) {
-            // Authorization 헤더에 토큰 추가
-            config.headers.Authorization = `Bearer ${token}`;
-            console.log('🔑 토큰이 헤더에 추가되었습니다:', token.substring(0, 20) + '...');
-        } else {
-            console.warn('⚠️ 토큰이 없습니다. 로그인이 필요할 수 있습니다.');
-        }
-        
-        return config;
-    },
-    (error) => {
-        console.error('❌ 요청 인터셉터 에러:', error);
-        return Promise.reject(error);
-    }
-);
 
-// 응답 인터셉터 - 토큰 만료 등 에러 처리
-api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        if (error.response?.status === 401) {
-            console.warn('🚫 인증 실패 - 토큰이 만료되었거나 유효하지 않습니다.');
-             window.location.href = '/login';
-        }
-        return Promise.reject(error);
+// 가게 정보 조회 API
+export const getMyStore = async () => {
+    try {
+        const response = await api.get('/stores/me');
+        return response.data;
+    } catch (error) {
+        console.error('내 가게 정보 조회 API 호출 오류:', error);
+        throw error;
     }
-);
+};
+
+// 가게 정보 수정 API 
+export const updateMyStore = async (payload) => {
+  try {
+    const { data } = await api.put('/stores/me', payload);
+    return data;
+  } catch (error) {
+    console.error('내 가게 정보 수정 API 호출 오류:', error);
+    throw error;
+  }
+};
+
+// 가게 탈퇴
+export const deleteMyStore = async () => {
+  try {
+    const res = await api.delete('/stores/me');
+    return res.data; // 서버가 바디 안 줄 수도 있음
+  } catch (error) {
+    console.error('회원탈퇴 API 호출 오류:', error);
+    throw error;
+  }
+};
+
+
+// 비밀번호 변경 API
+export const changeMyPassword = async ({ storeId, currentPassword, newPassword }) => {
+  try {
+    if (!currentPassword || !newPassword) {
+      throw new Error("현재/새 비밀번호를 모두 입력하세요.");
+    }
+
+    const { data } = await api.put(
+      "/stores/me/password",                        
+      { currentPassword, newPassword },             
+      storeId ? { params: { storeId: Number(storeId) } } : undefined 
+    );
+
+    return data;
+  } catch (error) {
+    const status = error.response?.status;
+    if (status === 400) {
+      error.userMessage = "현재 비밀번호가 올바르지 않거나 형식이 맞지 않습니다.";
+    } else if (status === 403) {
+      error.userMessage = "비밀번호를 변경할 권한이 없습니다.";
+    } else if (status === 404) {
+      error.userMessage = "가게 정보를 찾을 수 없습니다.";
+    } else if (status === 409) {
+      error.userMessage = "새 비밀번호가 정책에 맞지 않거나 최근 사용한 비밀번호입니다.";
+    } else if (status === 422) {
+      error.userMessage = "입력 값 검증에 실패했습니다.";
+    }
+    console.error("비밀번호 변경 API 오류:", {
+      message: error.message,
+      status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
+};
+
+
 
 // 메뉴 목록 불러오기 (내 가게 상품 전체 가져오기)
 export const getMenus = async () => {

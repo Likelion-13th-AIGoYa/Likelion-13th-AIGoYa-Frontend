@@ -1,0 +1,36 @@
+.profileContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; 
+  margin-top: 16px;
+}
+
+.formGroup > label {
+  display: block;
+  font-size: 13px;
+  color: #64748b; 
+  margin-bottom: 8px;
+  
+}
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0; 
+  background: #f8fafc;       
+  font-size: 15px;
+  color: #0f172a;            
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.colSpan2 {
+  grid-column: 1 / -1;
+}
