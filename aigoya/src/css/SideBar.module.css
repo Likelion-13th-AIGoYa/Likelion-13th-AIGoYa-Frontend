@@ -1,0 +1,249 @@
+/* 사이드 메뉴 */
+.sideMenu {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+
+.sideMenu.open {
+  left: 0;
+}
+
+.menuHeader {
+  background: linear-gradient(#0EA5E9, #3B82F6);
+  color: white;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 70px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menuHeader h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.menuBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* POS 시작 버튼 섹션 */
+.posSection {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.posButton {
+  width: 100%;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  padding: 16px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.posButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  background: #2754c5;
+}
+
+.posButton:active {
+  transform: translateY(0);
+}
+
+.posIcon {
+  flex-shrink: 0;
+}
+
+.menuContent {
+  padding: 24px 0;
+  flex: 1;
+}
+
+.menuItem {
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.menuItem:hover {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(102, 126, 234, 0.04) 100%);
+  color: #667eea;
+  border-left-color: #667eea;
+  padding-left: 28px;
+}
+
+.menuItem:hover .menuIcon {
+  color: #667eea;
+  transform: translateX(2px);
+}
+
+.menuIcon {
+  color: #6b7280;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* 하단 섹션 (마이페이지 + 로그아웃) */
+.bottomSection {
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 0;
+  margin-top: auto;
+}
+
+.bottomSection .menuItem {
+  color: #374151;
+  font-weight: 500;
+}
+
+.bottomSection .menuItem:hover {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(102, 126, 234, 0.04) 100%);
+  color: #667eea;
+  border-left-color: #667eea;
+  padding-left: 28px;
+}
+
+.bottomSection .menuItem:hover .menuIcon {
+  color: #667eea;
+  transform: translateX(2px);
+}
+
+.logoutItem {
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #dc2626;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.logoutItem:hover {
+  background: linear-gradient(90deg, rgba(220, 38, 38, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%);
+  color: #dc2626;
+  border-left-color: #dc2626;
+  padding-left: 28px;
+}
+
+.logoutItem:hover .menuIcon {
+  color: #dc2626;
+  transform: translateX(2px);
+}
+
+.logoutItem .menuIcon {
+  color: #dc2626;
+}
+
+/* 오버레이 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+/* 활성 상태 (나중에 라우팅 연결시 사용) */
+.menuItem.active {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.12) 0%, rgba(102, 126, 234, 0.06) 100%);
+  color: #667eea;
+  border-left-color: #667eea;
+  font-weight: 600;
+}
+
+.menuItem.active .menuIcon {
+  color: #667eea;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .sideMenu {
+    width: 280px;
+    left: -280px;
+  }
+  
+  .menuItem {
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  
+  .menuHeader {
+    padding: 16px 20px;
+    min-height: 60px;
+  }
+  
+  .menuHeader h2 {
+    font-size: 18px;
+  }
+
+  .posSection {
+    padding: 16px 20px;
+  }
+
+  .posButton {
+    font-size: 15px;
+    padding: 14px 18px;
+  }
+
+  .logoutItem {
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+}
