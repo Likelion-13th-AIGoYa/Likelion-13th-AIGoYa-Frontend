@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../css/MyPageProfileView.module.css";
 
-export default function MyPageProfileView({ store }) {
+function MyPageProfileView({ store }) {
   const name = store?.name ?? "";
   const phone = store?.phone ?? "";
   const email = store?.email ?? "";
@@ -31,3 +31,5 @@ export default function MyPageProfileView({ store }) {
     </div>
   );
 }
+
+export default MyPageProfileView;

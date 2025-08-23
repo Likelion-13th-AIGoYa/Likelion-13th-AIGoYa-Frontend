@@ -4,7 +4,8 @@ import { getMyStore, deleteMyStore } from "../api/storeApi";
 import styles from "../css/MyPage.module.css";
 import Header from "../component/header";
 import MyPageEdit from "../component/MyPageEdit";
-import MyPageProfileView from "../component/MyPageProfileView"; // ⬅️ 추가
+import MyPageProfileView from "../component/MyPageProfileView";
+import MyPagePassword from "../component/MyPagePassword"; 
 
 const firstChar = (t, fb = "상") => {
   const s = (t ?? "").trim();
@@ -18,7 +19,7 @@ export default function MyPage() {
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
-  const [mode, setMode] = useState("profile"); // 'profile' | 'edit'
+  const [mode, setMode] = useState("profile"); 
 
   useEffect(() => {
     (async () => {
@@ -55,15 +56,20 @@ export default function MyPage() {
   const email = store?.email ?? "";
   const avatar = firstChar(name, "상");
 
+  const HEAD = {
+    profile: { title: "기본 정보", sub: "등록된 가게 정보를 확인할 수 있어요." },
+    edit: { title: "가게 정보 수정", sub: "가게 정보를 안전하게 수정하세요." },
+    password: { title: "비밀번호 변경", sub: "현재 비밀번호 확인 후 새 비밀번호로 변경하세요." },
+  };
+  const { title, sub } = HEAD[mode];
+
   return (
     <div className={styles.page}>
       <div className={styles.header}><Header /></div>
 
       <div className={styles.shell}>
-        {/* ===== 왼쪽 사이드 ===== */}
         <aside className={styles.sidebar}>
           <div className={styles.sideCard}>
-
             <div className={styles.profileHeader}>
               <div className={styles.avatar}>{avatar}</div>
               <div className={styles.profileMeta}>
@@ -88,8 +94,8 @@ export default function MyPage() {
                 가게 정보 수정
               </button>
               <button
-                className={styles.navItem}
-                onClick={() => alert("비밀번호 변경 페이지 연결 예정")}
+                className={`${styles.navItem} ${mode === "password" ? styles.active : ""}`} 
+                onClick={() => setMode("password")} 
               >
                 비밀번호 변경
               </button>
@@ -109,19 +115,13 @@ export default function MyPage() {
 
         <section className={styles.content}>
           <div className={styles.contentHead}>
-            <h1 className={styles.title}>
-              {mode === "profile" ? "기본 정보" : "가게 정보 수정"}
-            </h1>
-            <p className={styles.sub}>
-              {mode === "profile"
-                ? "등록된 가게 정보를 확인할 수 있어요."
-                : "가게 정보를 안전하게 수정하세요."}
-            </p>
+            <h1 className={styles.title}>{title}</h1>
+            <p className={styles.sub}>{sub}</p>
           </div>
 
-          {mode === "profile" ? (
-            <MyPageProfileView store={store} />
-          ) : (
+          {mode === "profile" && <MyPageProfileView store={store} />}
+
+          {mode === "edit" && (
             <MyPageEdit
               initialStore={store}
               onCancel={() => setMode("profile")}
@@ -129,6 +129,14 @@ export default function MyPage() {
                 setStore((prev) => ({ ...prev, ...updated }));
                 setMode("profile");
               }}
+            />
+          )}
+
+          {mode === "password" && (
+            <MyPagePassword
+              storeId={store?.id ?? store?.storeId}   
+              onCancel={() => setMode("profile")}
+              onDone={() => setMode("profile")}       
             />
           )}
         </section>

@@ -19,7 +19,6 @@ const App = () => {
           <Route path="/chatbot" element={<ChatBotPage />} />
           <Route path="/posMachine" element={<PosMachinePage />} />
           <Route path="/main/mypage" element={<MyPage />} />
-          <Route path="/main/mypage/edit" element={<MyPageEdit />} />
           
           
         </Routes>

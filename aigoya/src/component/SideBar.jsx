@@ -26,7 +26,7 @@ const SideBar = ({ isMenuOpen, setIsMenuOpen, handleLogout }) => {
     };
 
     const handleMyPage = () => {
-        navigate('/mypage')
+        navigate('/main/mypage')
         setIsMenuOpen(false);
     };
 

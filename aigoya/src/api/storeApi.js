@@ -108,6 +108,44 @@ export const deleteMyStore = async () => {
 };
 
 
+// 비밀번호 변경 API
+export const changeMyPassword = async ({ storeId, currentPassword, newPassword }) => {
+  try {
+    if (!currentPassword || !newPassword) {
+      throw new Error("현재/새 비밀번호를 모두 입력하세요.");
+    }
+
+    const { data } = await api.put(
+      "/stores/me/password",                        
+      { currentPassword, newPassword },             
+      storeId ? { params: { storeId: Number(storeId) } } : undefined 
+    );
+
+    return data;
+  } catch (error) {
+    const status = error.response?.status;
+    if (status === 400) {
+      error.userMessage = "현재 비밀번호가 올바르지 않거나 형식이 맞지 않습니다.";
+    } else if (status === 403) {
+      error.userMessage = "비밀번호를 변경할 권한이 없습니다.";
+    } else if (status === 404) {
+      error.userMessage = "가게 정보를 찾을 수 없습니다.";
+    } else if (status === 409) {
+      error.userMessage = "새 비밀번호가 정책에 맞지 않거나 최근 사용한 비밀번호입니다.";
+    } else if (status === 422) {
+      error.userMessage = "입력 값 검증에 실패했습니다.";
+    }
+    console.error("비밀번호 변경 API 오류:", {
+      message: error.message,
+      status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
+};
+
+
+
 // 메뉴 목록 불러오기 (내 가게 상품 전체 가져오기)
 export const getMenus = async () => {
   try {

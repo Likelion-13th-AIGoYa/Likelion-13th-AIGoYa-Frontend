@@ -3,14 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getMyStore, updateMyStore } from "../api/storeApi";
 import styles from "../css/MyPageEdit.module.css";
 
-const firstChar = (t, fb = "") => {
-  const s = (t ?? "").trim();
-  if (!s) return fb;
-  const f = Array.from(s)[0];
-  return /^[a-z]$/.test(f) ? f.toUpperCase() : f;
-};
-
-export default function MyPageEdit({ initialStore, onCancel, onSaved }) {
+function MyPageEdit({ initialStore, onSaved }) {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
@@ -137,3 +130,5 @@ export default function MyPageEdit({ initialStore, onCancel, onSaved }) {
     </div>
   );
 }
+
+export default MyPageEdit;
