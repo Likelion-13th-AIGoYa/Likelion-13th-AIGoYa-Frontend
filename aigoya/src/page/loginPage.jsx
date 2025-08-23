@@ -25,7 +25,7 @@ const LoginPage = () => {
       sessionStorage.getItem("accessToken");
 
     if (token) {
-      navigate("/main", { replace: true }); // replace: 뒤로가기 눌러도 로그인 페이지 안 나오게
+      navigate("/main", { replace: true }); 
     }
   }, [navigate]);
 

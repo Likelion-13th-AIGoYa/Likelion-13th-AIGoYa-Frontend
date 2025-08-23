@@ -3,11 +3,14 @@ import { Menu, X, Star } from 'lucide-react';
 import styles from '../css/header.module.css';
 import { useNavigate } from "react-router-dom";
 
-
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const handleMyPage = () => {
+    navigate("/main/mypage", { replace: true });
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -113,7 +116,7 @@ const Header = () => {
           <div className={styles.menuItem}>고객 리뷰</div>
           <div className={styles.menuItem}>재고 관리</div>
           <div className={styles.menuItem}>직원 관리</div>
-          <div className={styles.menuItem}>설정</div>
+          <div className={styles.menuItem} onClick={handleMyPage}>설정</div>
 
           <div className={styles.menuItem} onClick={handleLogout}> 로그아웃 </div>
           

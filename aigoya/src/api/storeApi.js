@@ -12,6 +12,24 @@ const api = axios.create({
     timeout: 10000, // 10초 타임아웃
 });
 
+
+api.interceptors.request.use((config) => {
+    const token =
+        sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken");
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // 확인 로그
+    console.log("요청 보낼 헤더:", config.headers);
+
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+
 // 가게 생성(회원가입) API
 export const createStore = async (storeData) => {
     try {
@@ -31,6 +49,17 @@ export const loginStore = async (loginData) => {
         return response.data;
     } catch (error) {
         console.error('로그인 API 호출 오류:', error);
+        throw error;
+    }
+};
+
+// 가게 정보 조회 API
+export const getMyStore = async () => {
+    try {
+        const response = await api.get('/stores/me');
+        return response.data;
+    } catch (error) {
+        console.error('내 가게 정보 조회 API 호출 오류:', error);
         throw error;
     }
 };
