@@ -12,10 +12,6 @@ import Sales from '../component/mainSales';
 const MainPage = () => {
   const navigate = useNavigate();
 
-  const navigateToPosMachine = () => {
-    navigate('/posMachine');
-  };
-
   useEffect(() => {
     const token =
       localStorage.getItem("accessToken") ||
@@ -43,7 +39,6 @@ const MainPage = () => {
             <MainWeather />
             <MainPopularMenu />
             <MainUnpopularMenu />
-            <button className={`${styles.posMachinePageLink} ${styles.simple}`} onClick={navigateToPosMachine}>포스기 연결</button>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Star } from 'lucide-react';
+import { Menu, X, Star, BarChart3 } from 'lucide-react';
 import styles from '../css/header.module.css';
 import { useNavigate } from "react-router-dom";
+import SideBar from './SideBar';
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -54,16 +55,20 @@ const Header = () => {
                 {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
               <div className={styles.logo}>
-                <div className={styles.logoIcon}>📊</div>
-                <span className={styles.logoText}>스마트 매장 매니저</span>
+                <span className={styles.logoText}>AIGoYa</span>
               </div>
             </div>
 
             {/* 오른쪽: 매장명과 시간 */}
             <div className={styles.rightSection}>
-              <span className={styles.storeName}>맛있는집</span>
+              <div className={styles.storeInfo}>
+                <span className={styles.storeName}>맛있는집</span>
+                <span className={styles.storeStatus}>운영중</span>
+              </div>
               <span className={styles.divider}>|</span>
-              <span className={styles.time}>{formatTime(currentTime)}</span>
+              <div className={styles.timeContainer}>
+                <span className={styles.time}>{formatTime(currentTime)}</span>
+              </div>
             </div>
           </div>
         </header>
@@ -93,40 +98,12 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 사이드 메뉴 */}
-      <div className={`${styles.sideMenu} ${isMenuOpen ? styles.open : ''}`}>
-        <div className={styles.menuHeader}>
-          <h2>메뉴</h2>
-          <button
-            className={styles.closeButton}
-            onClick={() => setIsMenuOpen(false)}
-            aria-label="메뉴 닫기"
-          >
-            <X size={24} />
-          </button>
-        </div>
-        <nav className={styles.menuContent}>
-          {/* TODO: 메뉴 항목들 - 나중에 채울 부분 */}
-          <div className={styles.menuItem} onClick={()=> navigate("/main")}>대시보드</div>
-          <div className={styles.menuItem}>매출 분석</div>
-          <div className={styles.menuItem}>메뉴 관리</div>
-          <div className={styles.menuItem}>고객 리뷰</div>
-          <div className={styles.menuItem}>재고 관리</div>
-          <div className={styles.menuItem}>직원 관리</div>
-          <div className={styles.menuItem} onClick={()=> navigate("/main/mypage")}> 마이페이지 </div>
-
-          <div className={styles.menuItem} onClick={handleLogout}> 로그아웃 </div>
-          
-        </nav>
-      </div>
-
-      {/* 메뉴 열렸을 때 배경 오버레이 */}
-      {isMenuOpen && (
-        <div
-          className={styles.overlay}
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
+      {/* 사이드바 컴포넌트 */}
+      <SideBar 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen} 
+        handleLogout={handleLogout} 
+      />
     </>
   );
 };
