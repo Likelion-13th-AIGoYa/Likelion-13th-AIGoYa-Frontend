@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../css/mainWeather.module.css";
+import styles from "../css/MainWeather.module.css";
 
 const dummyData = {
   temperature: 18,

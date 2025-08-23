@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../css/mainUnpopularMenu.module.css";
+import styles from "../css/MainUnpopularMenu.module.css";
 
 const unpopularMenus = [
     { id: 1, name: "오징어볶음", subtitle: "경쟁사와 가격을 비교해보세요.", sales: 1 },

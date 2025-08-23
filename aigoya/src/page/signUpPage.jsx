@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import styles from "../css/signUpPage.module.css";
+import styles from "../css/SignUpPage.module.css";
 import { useForm } from "react-hook-form";
-import { createStore } from "../api/storeApi";
+import { createStore } from "../api/StoreApi";
 
 // 전화번호 포맷팅
 function formatPhone(v) {

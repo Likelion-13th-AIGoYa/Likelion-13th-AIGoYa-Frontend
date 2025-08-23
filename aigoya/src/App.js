@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MainPage from './page/mainPage';
-import ChatBotPage from './page/chatBotPage';
-import LoginPage from './page/loginPage';
-import PosMachinePage from './page/posMachinePage';
+import MainPage from './page/MainPage';
+import ChatBotPage from './page/ChatBotPage';
+import LoginPage from './page/LoginPage';
+import PosMachinePage from './page/PosMachinePage';
 import MyPage from './page/MyPage';
 import MyPageEdit from './component/MyPageEdit';
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyStore, updateMyStore } from "../api/storeApi";
+import { getMyStore, updateMyStore } from "../api/StoreApi";
 import styles from "../css/MyPageEdit.module.css";
 
 function MyPageEdit({ initialStore, onSaved }) {

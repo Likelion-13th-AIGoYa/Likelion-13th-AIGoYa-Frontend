@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from '../css/mainPage.module.css';
-import MainWeather from '../component/mainWeather';
-import MainPopularMenu from '../component/mainPopularMenu';
-import MainUnpopularMenu from '../component/mainUnpopularMenu';
-import MainChart from '../component/mainChart';
-import MainChatBot from '../component/mainChatBot';
-import Header from '../component/header';
-import Sales from '../component/mainSales';
+import styles from '../css/MainPage.module.css';
+import MainWeather from '../component/MainWeather';
+import MainPopularMenu from '../component/MainPopularMenu';
+import MainUnpopularMenu from '../component/MainUnpopularMenu';
+import MainChart from '../component/MainChart';
+import MainChatBot from '../component/MainChatBot';
+import Header from '../component/Header';
+import Sales from '../component/MainSales';
 
 const MainPage = () => {
   const navigate = useNavigate();

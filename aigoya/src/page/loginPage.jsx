@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { FiCheckCircle, FiLoader } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import styles from "../css/loginPage.module.css";
+import styles from "../css/LoginPage.module.css";
 import { AnimatePresence, motion } from "framer-motion";
-import SignUpPage from "../page/signUpPage";
-import { loginStore } from "../api/storeApi";
+import SignUpPage from "./SignUpPage";
+import { loginStore } from "../api/StoreApi";
 
 const LoginPage = () => {
   const navigate = useNavigate();
