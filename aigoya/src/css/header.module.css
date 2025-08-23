@@ -13,7 +13,7 @@
 .headerTop {
   background: #F8FAfc;
   border-bottom: 1px solid #e0e0e0;
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,14 +38,15 @@
   background: transparent;
   border: 1px solid #ddd;
   color: #333;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   transition: all 0.2s ease;
+  border-radius: 10px;
 }
 
 .menuButton:hover {

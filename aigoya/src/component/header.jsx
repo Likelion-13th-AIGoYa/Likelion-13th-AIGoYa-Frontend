@@ -8,7 +8,6 @@ const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");

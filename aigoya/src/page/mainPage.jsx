@@ -21,8 +21,6 @@ const MainPage = () => {
       // 토큰 없으면 로그인 페이지로 튕김
       navigate("/", { replace: true });
     }
-
-
   }, [navigate]);
 
   return (

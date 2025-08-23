@@ -10,7 +10,9 @@ export default function MyPagePassword({ storeId, onCancel, onDone }) {
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: { currentPassword: "", newPassword: "", confirm: "" } });
+  } = useForm({
+    defaultValues: { currentPassword: "", newPassword: "", confirm: "" },
+  });
 
   const [serverError, setServerError] = useState("");
   const [ok, setOk] = useState(false);
@@ -28,7 +30,9 @@ export default function MyPagePassword({ storeId, onCancel, onDone }) {
       reset({ currentPassword: "", newPassword: "", confirm: "" });
       onDone?.();
     } catch (e) {
-      setServerError(e.userMessage || "비밀번호 변경에 실패했어요. 다시 시도해 주세요.");
+      setServerError(
+        e.userMessage || "비밀번호 변경에 실패했어요. 다시 시도해 주세요."
+      );
     }
   };
 
@@ -38,50 +42,85 @@ export default function MyPagePassword({ storeId, onCancel, onDone }) {
       {ok && <div className={styles.success}>비밀번호가 변경되었습니다.</div>}
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="currentPassword">현재 비밀번호</label>
+        <label className={styles.label} htmlFor="currentPassword">
+          현재 비밀번호
+        </label>
         <input
           id="currentPassword"
           type="password"
-          className={styles.input}
+          className={`${styles.input} ${errors.currentPassword ? styles.inputError : ""
+            }`}
           autoComplete="current-password"
-          {...register("currentPassword", { required: "현재 비밀번호를 입력하세요." })}
+          {...register("currentPassword", {
+            required: "현재 비밀번호를 입력하세요.",
+          })}
         />
-        {errors.currentPassword && <small style={{ color: "#b91c1c" }}>{errors.currentPassword.message}</small>}
+        {errors.currentPassword && (
+          <small className={styles.errorText}>
+            {errors.currentPassword.message}
+          </small>
+        )}
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="newPassword">새 비밀번호</label>
+        <label className={styles.label} htmlFor="newPassword">
+          새 비밀번호
+        </label>
         <input
           id="newPassword"
           type="password"
-          className={styles.input}
+          className={`${styles.input} ${errors.newPassword ? styles.inputError : ""
+            }`}
           autoComplete="new-password"
           {...register("newPassword", {
-
             required: "새 비밀번호를 입력하세요.",
             minLength: { value: 8, message: "8자 이상 입력하세요." },
           })}
         />
-        {errors.newPassword && <small style={{ color: "#b91c1c" }}>{errors.newPassword.message}</small>}
+        {errors.newPassword && (
+          <small className={styles.errorText}>
+            {errors.newPassword.message}
+          </small>
+        )}
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="confirm">새 비밀번호 확인</label>
+        <label className={styles.label} htmlFor="confirm">
+          새 비밀번호 확인
+        </label>
         <input
           id="confirm"
           type="password"
-          className={styles.input}
+          className={`${styles.input} ${errors.confirm ? styles.inputError : ""
+            }`}
           autoComplete="new-password"
           {...register("confirm", {
-            validate: (v) => v === watch("newPassword") || "비밀번호가 일치하지 않습니다.",
+            validate: (v) =>
+              v === watch("newPassword") || "비밀번호가 일치하지 않습니다.",
           })}
         />
-        {errors.confirm && <small style={{ color: "#b91c1c" }}>{errors.confirm.message}</small>}
+        {errors.confirm && (
+          <small className={styles.errorText}>
+            {errors.confirm.message}
+          </small>
+        )}
       </div>
 
       <div className={styles.actions}>
-        <button type="submit" className={styles.primaryBtn} disabled={isSubmitting}>
+        <button
+          type="submit"
+          className={styles.primaryBtn}
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "변경 중..." : "비밀번호 변경"}
+        </button>
+        <button
+          type="button"
+          className={styles.ghostBtn}
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          취소
         </button>
       </div>
     </form>
