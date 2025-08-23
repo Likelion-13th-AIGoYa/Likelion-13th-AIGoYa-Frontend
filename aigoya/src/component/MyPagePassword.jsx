@@ -35,7 +35,6 @@ export default function MyPagePassword({ storeId, onCancel, onDone }) {
       );
     }
   };
-
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
       {serverError && <div className={styles.error}>{serverError}</div>}

@@ -6,7 +6,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* 제목 */
 .title {
     font-size: 20px;
     font-weight: bold;
@@ -14,14 +13,12 @@
     margin: 0px 20px;
 }
 
-/* 리스트 설정 */
 .list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-/* 리스트 내부 메뉴 카드 */
 .card {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -35,7 +32,6 @@
     height: 70px;
 }
 
-/* 1, 2, 3등 랭킹 뱃지 설정 */
 .rankBadge {
     background: orange;
     color: white;
@@ -62,7 +58,6 @@
     margin-top: 1px;   
 }
 
-/* 메뉴명, 메뉴 설명 컨테이너 */
 .info {
     display: flex;
     flex-direction: column;
@@ -79,7 +74,6 @@
     color: #888;
 }
 
-/* 그릇수 */
 .sales {
     color: #2f80ed;
     font-weight: bold;

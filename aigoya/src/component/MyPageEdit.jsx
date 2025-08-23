@@ -5,7 +5,6 @@ import styles from "../css/MyPageEdit.module.css";
 
 function MyPageEdit({ initialStore, onSaved }) {
   const navigate = useNavigate();
-
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -67,7 +66,6 @@ function MyPageEdit({ initialStore, onSaved }) {
     try {
       setSaving(true);
       const updated = await updateMyStore(payload);
-
       if (onSaved) return onSaved(updated ?? payload);
       navigate("/main/mypage", { replace: true });
     } catch (e2) {
@@ -82,7 +80,6 @@ function MyPageEdit({ initialStore, onSaved }) {
   return (
     <div className={styles.container}>
       <form className={styles.card} onSubmit={onSubmit}>
-
 
         {error && <div className={styles.error}>{error}</div>}
 

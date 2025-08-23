@@ -31,5 +31,4 @@ function MyPageProfileView({ store }) {
     </div>
   );
 }
-
 export default MyPageProfileView;

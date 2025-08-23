@@ -1,14 +1,11 @@
 import React from "react";
 import styles from "../css/mainWeather.module.css";
 
-// 더미 데이터
 const dummyData = {
   temperature: 18,
   summary: "흐린 후 비",
   aiMenuSuggestion: "따뜻한 국물 요리 주문량 증가 예상",
 };
-
-
 
 function mainWeather() {
   const { temperature, summary, aiMenuSuggestion } = dummyData;
