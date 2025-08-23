@@ -8,9 +8,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   
-  const handleMyPage = () => {
-    navigate("/main/mypage", { replace: true });
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -110,13 +107,13 @@ const Header = () => {
         </div>
         <nav className={styles.menuContent}>
           {/* TODO: 메뉴 항목들 - 나중에 채울 부분 */}
-          <div className={styles.menuItem}>대시보드</div>
+          <div className={styles.menuItem} onClick={()=> navigate("/main")}>대시보드</div>
           <div className={styles.menuItem}>매출 분석</div>
           <div className={styles.menuItem}>메뉴 관리</div>
           <div className={styles.menuItem}>고객 리뷰</div>
           <div className={styles.menuItem}>재고 관리</div>
           <div className={styles.menuItem}>직원 관리</div>
-          <div className={styles.menuItem} onClick={handleMyPage}>설정</div>
+          <div className={styles.menuItem} onClick={()=> navigate("/main/mypage")}> 마이페이지 </div>
 
           <div className={styles.menuItem} onClick={handleLogout}> 로그아웃 </div>
           

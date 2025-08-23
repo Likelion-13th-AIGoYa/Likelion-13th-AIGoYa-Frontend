@@ -6,6 +6,7 @@ import ChatBotPage from './page/chatBotPage';
 import LoginPage from './page/loginPage';
 import PosMachinePage from './page/posMachinePage';
 import MyPage from './page/MyPage';
+import MyPageEdit from './component/MyPageEdit';
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/chatbot" element={<ChatBotPage />} />
           <Route path="/posMachine" element={<PosMachinePage />} />
           <Route path="/main/mypage" element={<MyPage />} />
+          <Route path="/main/mypage/edit" element={<MyPageEdit />} />
           
           
         </Routes>
