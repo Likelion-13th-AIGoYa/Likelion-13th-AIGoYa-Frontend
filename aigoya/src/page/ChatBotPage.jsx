@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from '../css/ChatBotPage.module.css';
+import { getMyStore } from '../api/StoreApi';
 
 const defaultSuggestions = [
     "오늘 매출 요약 보여줘",
@@ -12,12 +13,6 @@ const defaultSuggestions = [
     "주요 개선 포인트"
 ];
 
-const menuButtons = [
-    { label: "매출 분석 홈", link: "/" },
-    { label: "트렌드 리포트", link: "#" },
-    { label: "피드백 내역", link: "#" }
-];
-
 const ChatBotPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -25,57 +20,127 @@ const ChatBotPage = () => {
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [chatSessions, setChatSessions] = useState([]);
+    const [currentSessionId, setCurrentSessionId] = useState(null);
+    const [storeInfo, setStoreInfo] = useState(null);
     const messageEndRef = useRef(null);
 
     useEffect(() => {
-        const initialMsgs = [
-            { type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }
-        ];
-        if (location.state?.initialMessage) {
-            initialMsgs.push({ type: "user", text: location.state.initialMessage });
-        }
-        setMessages(initialMsgs);
+        // 가게 정보 가져오기
+        const fetchStoreInfo = async () => {
+            try {
+                const data = await getMyStore();
+                setStoreInfo(data);
+            } catch (error) {
+                console.error('가게 정보 조회 실패:', error);
+            }
+        };
+        fetchStoreInfo();
 
-        if (location.state?.initialMessage) {
-            sendToAPI(location.state.initialMessage);
+        // 새로운 채팅 세션 시작
+        startNewSession();
+
+        // 초기 메시지 설정
+        const initialMessage = location.state?.initialMessage;
+        if (initialMessage) {
+            setTimeout(() => {
+                handleSendMessage(initialMessage);
+            }, 100);
         }
-        // eslint-disable-next-line
     }, [location.state]);
 
     useEffect(() => {
         messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isTyping]);
 
-    // 실제 API와 연동하기 위한 준비 함수
-    const sendToAPI = async (msg) => {
-        setIsTyping(true);
-        // API 예시 (실제 API 주소로 대체 필요)
-        try {
-            // const res = await fetch('/api/chat', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ message: msg })
-            // });
-            // const data = await res.json();
-            // setMessages(prev => [...prev, {type: "bot", text: data.answer}]);
+    const startNewSession = () => {
+        const newSessionId = Date.now();
+        const newSession = {
+            id: newSessionId,
+            title: "새로운 채팅",
+            messages: [{ type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }],
+            timestamp: new Date()
+        };
+        
+        setChatSessions(prev => [newSession, ...prev]);
+        setCurrentSessionId(newSessionId);
+        setMessages(newSession.messages);
+    };
 
-            // 아래는 PRESENTATION용 더미 처리 (API 연결 전)
-            setTimeout(() => {
-                setMessages(prev => [...prev, { type: "bot", text: `[API 응답] ${msg}에 대한 분석 결과입니다.` }]);
-                setIsTyping(false);
-            }, 1300);
-        } catch (e) {
-            setMessages(prev => [...prev, { type: "bot", text: "응답 중 오류가 발생했습니다." }]);
+    const switchToSession = (sessionId) => {
+        const session = chatSessions.find(s => s.id === sessionId);
+        if (session) {
+            setCurrentSessionId(sessionId);
+            setMessages(session.messages);
+        }
+    };
+
+    const updateCurrentSession = (newMessages) => {
+        setChatSessions(prev => prev.map(session => {
+            if (session.id === currentSessionId) {
+                return {
+                    ...session,
+                    messages: newMessages,
+                    title: newMessages[1]?.text?.substring(0, 30) + "..." || "새로운 채팅"
+                };
+            }
+            return session;
+        }));
+    };
+
+    const sendToAPI = async (msg) => {
+        if (!storeInfo?.storeId) {
+            setMessages(prev => [...prev, { type: "bot", text: "가게 정보를 불러올 수 없습니다. 다시 로그인해주세요." }]);
+            return;
+        }
+
+        setIsTyping(true);
+        try {
+            const response = await fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    message: msg
+                }),
+                params: {
+                    storeId: storeInfo.storeId
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const newMessages = [...messages, { type: "bot", text: data.result }];
+            setMessages(newMessages);
+            updateCurrentSession(newMessages);
+        } catch (error) {
+            console.error('API 호출 오류:', error);
+            const errorMessages = [...messages, { type: "bot", text: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요." }];
+            setMessages(errorMessages);
+            updateCurrentSession(errorMessages);
+        } finally {
             setIsTyping(false);
         }
     };
 
-    const handleSend = () => {
-        const trimmed = input.trim();
+    const handleSendMessage = (message = input) => {
+        const trimmed = message.trim();
         if (!trimmed) return;
-        setMessages(prev => [...prev, { type: "user", text: trimmed }]);
+        
+        const newMessages = [...messages, { type: "user", text: trimmed }];
+        setMessages(newMessages);
+        updateCurrentSession(newMessages);
         setInput("");
         sendToAPI(trimmed);
+    };
+
+    const handleSend = () => {
+        handleSendMessage();
     };
 
     const handleKeyDown = (e) => {
@@ -91,32 +156,55 @@ const ChatBotPage = () => {
     };
 
     return (
-        <div className={styles.outer}>
-            {/* 메뉴바 */}
-            <nav className={styles.menuBar}>
-                <div className={styles.menuTitle}>AI 매출 분석 · 어시스턴트</div>
-                <div className={styles.menuBtns}>
-                    {menuButtons.map(btn => (
-                        <button
-                            key={btn.label}
-                            className={styles.menuBtn}
-                            onClick={() => btn.link === "/" ? navigate("/") : alert("아직 준비중 입니다.")}
+        <div className={styles.container}>
+            {/* 좌측 사이드바 - 채팅 기록 */}
+            <div className={styles.sidebar}>
+                <div className={styles.sidebarHeader}>
+                    <h3>채팅 기록</h3>
+                    <button 
+                        className={styles.newChatBtn}
+                        onClick={startNewSession}
+                    >
+                        + 새 채팅
+                    </button>
+                </div>
+                <div className={styles.chatList}>
+                    {chatSessions.map(session => (
+                        <div
+                            key={session.id}
+                            className={`${styles.chatItem} ${currentSessionId === session.id ? styles.active : ''}`}
+                            onClick={() => switchToSession(session.id)}
                         >
-                            {btn.label}
-                        </button>
+                            <div className={styles.chatTitle}>{session.title}</div>
+                            <div className={styles.chatTime}>
+                                {session.timestamp.toLocaleTimeString('ko-KR', { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit' 
+                                })}
+                            </div>
+                        </div>
                     ))}
                 </div>
-            </nav>
+                <div className={styles.homeButton}>
+                    <button 
+                        className={styles.backToHomeBtn}
+                        onClick={() => navigate("/")}
+                    >
+                        ← 매출 분석 홈으로
+                    </button>
+                </div>
+            </div>
 
-            {/* 챗봇 영역 */}
-            <div className={styles.container}>
+            {/* 우측 메인 채팅 영역 */}
+            <div className={styles.mainChat}>
                 <div className={styles.chatHeader}>
                     <div className={styles.aiIcon}>AI</div>
                     <div>
                         <span className={styles.title}>매출 분석 어시스턴트</span>
-                        <span className={styles.subtitle}>· 실시간 분석</span>
+                        <span className={styles.subtitle}>실시간 분석</span>
                     </div>
                 </div>
+
                 <div className={styles.messageArea}>
                     {messages.map((msg, idx) => (
                         <div
@@ -134,19 +222,20 @@ const ChatBotPage = () => {
                                 <span className={styles.typingDot}></span>
                                 <span className={styles.typingDot}></span>
                                 <span className={styles.typingDot}></span>
-                            </div>
+            </div>
                         </div>
                     )}
                     <div ref={messageEndRef} />
                 </div>
-                {/* 추천 질문 드롭다운 */}
+
+                {/* 입력 영역 */}
                 <div className={styles.inputArea}>
                     <div className={styles.dropdownWrapper}>
                         <button
                             className={styles.dropdownBtn}
                             onClick={() => setDropdownOpen(v => !v)}
                         >
-                            ▲ 추천질문
+                            💡 추천질문
                         </button>
                         {dropdownOpen && (
                             <div className={styles.dropdown}>
@@ -162,21 +251,23 @@ const ChatBotPage = () => {
                             </div>
                         )}
                     </div>
-                    <textarea
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="질문을 입력해 주세요..."
-                        className={styles.input}
-                        rows={1}
-                    />
-                    <button
-                        className={styles.sendButton}
-                        onClick={handleSend}
-                        disabled={!input.trim()}
-                    >
-                        전송
-                    </button>
+                    <div className={styles.inputWrapper}>
+                        <textarea
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="질문을 입력해 주세요..."
+                            className={styles.input}
+                            rows={1}
+                        />
+                        <button
+                            className={styles.sendButton}
+                            onClick={handleSend}
+                            disabled={!input.trim() || isTyping}
+                        >
+                            전송
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

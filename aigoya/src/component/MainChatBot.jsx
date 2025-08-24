@@ -45,13 +45,13 @@ const MainChatBot = () => {
             <div className={styles.header}>
                 <div className={styles.aiIcon}>AI</div>
                 <div className={styles.headerContent}>
-                    <h3 className={styles.title}>매출 분석 어시스턴트</h3>
+                    <h3 className={styles.title}>POSMATE</h3>
                     <p className={styles.subtitle}>실시간 분석 중</p>
                 </div>
             </div>
 
             <div className={styles.description}>
-                오늘 매출 분석을 완료했습니다. 점심 시간대 매출이 가장 높았고, 인기 메뉴는 불고기 정식과 김치찌개입니다. <br/>추가적인 질문이나 피드백이 있으시면 언제든지 말씀해 주세요.
+                매출과 운영에 대해 도움을 줄 수 있는 매출 분석 어시스턴트 'POSMATE'입니다.<br/> 궁금한 점이나 추가적인 질문이 있으시면 언제든지 말씀해 주세요.
             </div>
 
             <div className={styles.quickButtons}>

@@ -50,6 +50,24 @@ api.interceptors.response.use(
   }
 );
 
+// AI 챗봇 API 추가
+export const sendChatMessage = async (message, storeId) => {
+    try {
+        console.log('🤖 AI 챗봇 메시지 전송:', { message, storeId });
+        
+        const response = await api.post('/api/ai/chat', 
+            { message }, 
+            { params: { storeId } }
+        );
+        
+        console.log('✅ AI 챗봇 응답:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('❌ AI 챗봇 API 오류:', error);
+        throw error;
+    }
+};
+
 // 가게 생성(회원가입) API
 // export const createStore = async (storeData) => {
 //     try {
