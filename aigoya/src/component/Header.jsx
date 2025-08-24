@@ -54,7 +54,7 @@ const Header = () => {
                 {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
               <div className={styles.logo}>
-                <span className={styles.logoText}>AIGoYa</span>
+                <span className={styles.logoText}>POSMATE</span>
               </div>
             </div>
 
@@ -62,7 +62,6 @@ const Header = () => {
             <div className={styles.rightSection}>
               <div className={styles.storeInfo}>
                 <span className={styles.storeName}>맛있는집</span>
-                <span className={styles.storeStatus}>운영중</span>
               </div>
               <span className={styles.divider}>|</span>
               <div className={styles.timeContainer}>

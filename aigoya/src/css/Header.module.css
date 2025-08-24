@@ -7,6 +7,7 @@
   left: 0;
   min-width: 1280px;
   width: 100%;
+  margin: 0 auto
 }
 
 /* 첫 번째 줄 - 흰색 배경 */
@@ -103,6 +104,7 @@
 .headerBottom {
   background: #2754c5;
   height: 32px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;

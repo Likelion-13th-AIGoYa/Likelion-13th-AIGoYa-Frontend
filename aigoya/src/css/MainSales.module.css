@@ -163,7 +163,6 @@
 @media (max-width: 1024px) {
   .statsContainer {
     gap: 12px;
-    padding: 16px;
   }
   
   .statsCard {
