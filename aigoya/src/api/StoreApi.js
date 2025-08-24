@@ -419,3 +419,29 @@ export const deleteCategory = async (categoryId) => {
     throw error;
   }
 };
+
+// 오늘과 어제 매출 데이터 조회
+export const getTodaySales = async () => {
+  try {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const yesterday = new Date(Date.now() - 24*60*60*1000).toISOString().split('T')[0];
+    
+    console.log('📊 매출 데이터 조회:', today, yesterday);
+    
+    // 오늘과 어제 데이터 동시 요청
+    const [todayResponse, yesterdayResponse] = await Promise.all([
+      api.get(`/stores/me/analytics/daily-summary?date=${today}`),
+      api.get(`/stores/me/analytics/daily-summary?date=${yesterday}`)
+    ]);
+    
+    console.log('✅ 매출 데이터 조회 완료:', todayResponse.data, yesterdayResponse.data);
+    
+    return {
+      today: todayResponse.data,
+      yesterday: yesterdayResponse.data
+    };
+  } catch (error) {
+    console.error('❌ 매출 데이터 조회 실패:', error);
+    throw error;
+  }
+};
