@@ -40,29 +40,81 @@ const MainChart = () => {
   const startHour = useMemo(() => parseHourInclusive(startTime), [startTime]);
   const endHour = useMemo(() => parseHourInclusive(endTime), [endTime]);
 
-  // 필터링된 차트용 데이터로 변환
+  // UTC 시간을 KST로 변환하는 함수 추가
+  const convertUTCtoKST = (utcHour) => {
+    // UTC + 9시간 = KST
+    return (utcHour + 9) % 24;
+  };
+
   const salesData = useMemo(() => {
-    // API가 일부 시간만 반환할 수 있으므로 0~23시 스파스 데이터 보정 여부 결정 가능
-    // 여기서는 반환된 데이터만 사용 (없는 시간대는 라벨에서 제외)
+    console.log('rawSalesData 처리 시작:', rawSalesData);
+
     const filtered = rawSalesData.filter(item => {
-      const h = Number(item.hour);
-      // 범위 유효성: startHour <= endHour 일 때 일반 비교
+      let h;
+
+      if (item.orderedAt) {
+        // orderedAt이 있는 경우 Date 객체로 변환 후 KST 시간 추출
+        const date = new Date(item.orderedAt);
+        h = date.getHours(); // 브라우저 로컬 시간 (KST)
+        console.log(`orderedAt 변환: ${item.orderedAt} → ${h}시`);
+      } else if (item.hour !== undefined) {
+        // hour만 있는 경우, 서버가 UTC로 주는지 확인
+        const originalHour = Number(item.hour);
+        h = convertUTCtoKST(originalHour); // UTC → KST 변환
+        console.log(`hour 변환: ${originalHour}(UTC) → ${h}시(KST)`);
+      } else {
+        console.warn('시간 정보가 없는 아이템:', item);
+        return false;
+      }
+
+      // 필터링 로직
       if (startHour <= endHour) {
         return h >= startHour && h <= endHour;
       }
-      // 만약 사용자가 종료가 시작보다 이전(야간跨일)을 선택했다면: 예) 20:00 ~ 06:00
-      // 밤~자정(>=startHour) 또는 새벽(<=endHour) 시간 포함
       return h >= startHour || h <= endHour;
     });
 
-    // 차트 포맷으로 매핑
     return filtered
-      .sort((a, b) => a.hour - b.hour)
-      .map(item => ({
-        time: `${String(item.hour).padStart(2, '0')}:00`,
-        sales: item.totalSales
-      }));
+      .sort((a, b) => {
+        let aHour, bHour;
+
+        if (a.orderedAt) {
+          aHour = new Date(a.orderedAt).getHours();
+        } else {
+          aHour = convertUTCtoKST(Number(a.hour));
+        }
+
+        if (b.orderedAt) {
+          bHour = new Date(b.orderedAt).getHours();
+        } else {
+          bHour = convertUTCtoKST(Number(b.hour));
+        }
+
+        return aHour - bHour;
+      })
+      .map(item => {
+        let hourText;
+        let displayHour;
+
+        if (item.orderedAt) {
+          displayHour = new Date(item.orderedAt).getHours();
+          hourText = `${String(displayHour).padStart(2, '0')}:00`;
+        } else {
+          displayHour = convertUTCtoKST(Number(item.hour));
+          hourText = `${String(displayHour).padStart(2, '0')}:00`;
+        }
+
+        console.log(`최종 표시: ${item.hour || item.orderedAt} → ${hourText}`);
+
+        return {
+          time: hourText,
+          sales: item.totalSales,
+          originalHour: item.hour // 디버깅용
+        };
+      });
   }, [rawSalesData, startHour, endHour]);
+
+
 
   const drawChart = () => {
     const canvas = chartRef.current;

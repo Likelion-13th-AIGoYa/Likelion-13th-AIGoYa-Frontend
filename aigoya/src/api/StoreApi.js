@@ -285,9 +285,13 @@ export const createOrder = async (orderItems) => {
       quantity: item.quantity
     }));
 
+    // KST 시간으로 변환 (UTC + 9시간)
+    const now = new Date();
+    const kstTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+
     const requestData = {
       orderProducts: orderProducts,
-      orderedAt: new Date().toISOString()
+      orderedAt: kstTime.toISOString()
     };
 
     const response = await api.post('/stores/me/orders', requestData);
@@ -298,6 +302,7 @@ export const createOrder = async (orderItems) => {
     throw error;
   }
 };
+
 
 // 주문 목록 조회
 export const getOrders = async () => {
@@ -420,13 +425,18 @@ export const deleteCategory = async (categoryId) => {
   }
 };
 
-// 오늘과 어제 매출 데이터 조회
+// 오늘과 어제 매출 데이터 조회 (KST 기준)
 export const getTodaySales = async () => {
   try {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const yesterday = new Date(Date.now() - 24*60*60*1000).toISOString().split('T')[0];
+    // KST 시간 기준으로 오늘과 어제 날짜 계산
+    const now = new Date();
+    const kstNow = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    const kstYesterday = new Date(kstNow.getTime() - (24 * 60 * 60 * 1000));
     
-    console.log('📊 매출 데이터 조회:', today, yesterday);
+    const today = kstNow.toISOString().split('T')[0]; // YYYY-MM-DD
+    const yesterday = kstYesterday.toISOString().split('T')[0];
+    
+    console.log('📊 매출 데이터 조회 (KST):', today, yesterday);
     
     // 오늘과 어제 데이터 동시 요청
     const [todayResponse, yesterdayResponse] = await Promise.all([
@@ -446,22 +456,65 @@ export const getTodaySales = async () => {
   }
 };
 
-// 시간대별 매출 분석
+// 시간대별 매출 분석 (KST 기준)
 export const getSalesByHour = async (date = null) => {
   try {
     console.log('📊 시간대별 매출 분석 요청:', date);
     
-    // 날짜 파라미터가 없으면 오늘 날짜 사용
-    const queryDate = date || new Date().toISOString().split('T')[0];
+    let queryDate;
+    if (date) {
+      queryDate = date;
+    } else {
+      // KST 기준 오늘 날짜
+      const now = new Date();
+      const kstNow = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      queryDate = kstNow.toISOString().split('T')[0];
+    }
+    
     const url = `/stores/me/analytics/sales-by-hour?date=${queryDate}`;
     
     const response = await api.get(url);
+    
+    // 응답 데이터의 시간도 KST로 변환 (필요한 경우)
+    if (response.data && Array.isArray(response.data)) {
+      const convertedData = response.data.map(item => {
+        if (item.hour !== undefined) {
+          // 시간 데이터가 UTC로 오는 경우 KST로 변환
+          return {
+            ...item,
+            hour: item.hour, // 이미 시간대별로 정리된 데이터라면 그대로 사용
+            displayTime: `${String(item.hour).padStart(2, '0')}:00` // 표시용 시간
+          };
+        }
+        return item;
+      });
+      
+      console.log('✅ 시간대별 매출 분석 완료 (KST 변환):', convertedData);
+      return convertedData;
+    }
+    
     console.log('✅ 시간대별 매출 분석 완료:', response.data);
     return response.data;
   } catch (error) {
     console.error('❌ 시간대별 매출 분석 API 오류:', error);
     throw error;
   }
+};
+
+// 파일 상단에 유틸리티 함수 추가
+const convertToKST = (utcDate) => {
+  const date = new Date(utcDate);
+  return new Date(date.getTime() + (9 * 60 * 60 * 1000));
+};
+
+const getKSTDateString = (date = new Date()) => {
+  const kstDate = convertToKST(date);
+  return kstDate.toISOString().split('T')[0];
+};
+
+const getKSTTimeString = (date = new Date()) => {
+  const kstDate = convertToKST(date);
+  return kstDate.toISOString();
 };
 
 // 메뉴 분석(인기/비인기) API 
