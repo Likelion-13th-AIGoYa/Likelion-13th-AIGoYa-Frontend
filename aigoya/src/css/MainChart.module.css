@@ -19,25 +19,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     height: 80px;
     border-bottom: 1px solid #CBD5E0;
-}
-
-.headerButtonContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.headerButton {
-    padding: 8px 12px;
-    font-size: 12px;
-    border-radius: 8px;
-    background-color: #3B82F6;
-    color: white;
-    border: 1px solid #E2E8F0;
 }
 
 .chartMainContainer {
@@ -63,6 +48,24 @@
 .chart {
     width: 100%;
     height: 100%;
+}
+
+.loadingMessage,
+.errorMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    font-size: 14px;
+    color: #64748B;
+    background-color: #F8FAFC;
+    border-radius: 8px;
+}
+
+.errorMessage {
+    color: #EF4444;
+    background-color: #FEF2F2;
 }
 
 .chartInfo {
@@ -97,12 +100,46 @@
     font-weight: 600;
 }
 
-.activeButton {
-    background-color: #1D4ED8 !important;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; /* 좌: 타이틀, 우: 필터 */
+  width: 100%;
+  height: 80px;
+  border-bottom: 1px solid #CBD5E0;
 }
 
-.headerButton:hover {
-    background-color: #2563EB;
-    transition: all 0.2s ease;
+.timeFilter {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.timeField {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.timeLabel {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.timeInput {
+  height: 32px;
+  padding: 4px 8px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-size: 12px;
+}
+
+.timeInput:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
 }
