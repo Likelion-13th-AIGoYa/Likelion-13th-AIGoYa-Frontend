@@ -1,7 +1,7 @@
 /* 전체 영역 */
 .app {
     display: grid;
-    gap: 14px;
+    gap: 10px;
     padding-top: 10px;
 }
 
@@ -150,7 +150,7 @@
 .termsCheckbox {
     display: flex;
     align-items: flex-start;
-    margin: 8px 0 24px;
+    margin: 8px 0 0px;
     gap: 12px;
 }
 

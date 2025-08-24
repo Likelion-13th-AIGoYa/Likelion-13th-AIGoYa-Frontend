@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Home, Bot, BarChart3, Menu as  Users, LogOut, Monitor, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/SideBar.module.css';
+import logo from "../image/mainLogoRemoveWhite.png";
 
 const SideBar = ({ isMenuOpen, setIsMenuOpen, handleLogout }) => {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ const SideBar = ({ isMenuOpen, setIsMenuOpen, handleLogout }) => {
             {/* 사이드 메뉴 */}
             <div className={`${styles.sideMenu} ${isMenuOpen ? styles.open : ''}`}>
                 <div className={styles.menuHeader}>
-                    <h2>AIGoYa</h2>
+                    <img src={logo} alt='logo' className={styles.hederLogo} />
                     <button
                         className={styles.closeButton}
                         onClick={() => setIsMenuOpen(false)}

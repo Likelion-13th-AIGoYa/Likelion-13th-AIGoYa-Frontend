@@ -20,6 +20,12 @@
   justify-content: center;
 }
 
+.hederLogo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
 .headerTopContainer {
   width: 1280px;
   padding: 20px;

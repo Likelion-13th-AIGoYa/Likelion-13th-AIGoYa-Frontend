@@ -6,10 +6,11 @@ import styles from "../css/LoginPage.module.css";
 import { AnimatePresence, motion } from "framer-motion";
 import SignUpPage from "./SignUpPage";
 import { loginStore } from "../api/StoreApi";
+import logo from "../image/mainLogoRemoveWhite.png";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState("login"); 
+  const [mode, setMode] = useState("login");
   const [signedUpEmail, setSignedUpEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,7 +20,7 @@ const LoginPage = () => {
       sessionStorage.getItem("accessToken");
 
     if (token) {
-      navigate("/main", { replace: true }); 
+      navigate("/main", { replace: true });
     }
   }, [navigate]);
 
@@ -91,12 +92,8 @@ const LoginPage = () => {
       {/* 좌측 소개 */}
       <section className={styles.left}>
         <div className={styles.leftInner}>
-          <div className={styles.logoWrap}>
-            <div className={styles.logo}>로고<br />변경</div>
-          </div>
-
           <h1 className={styles.title}>
-            스마트 매장 <br /> 매니저
+            <img src={logo} alt='logo' className={styles.loginLogo} />
           </h1>
 
           <ul className={styles.list}>
@@ -112,7 +109,7 @@ const LoginPage = () => {
 
       <section className={styles.right}>
         <div className={styles.formWrap}>
-          <h2 className={styles.formTitle}>AIGoYa</h2>
+          <h2 className={styles.formTitle}>{mode === "login" ? "로그인" : "회원가입"}</h2>
           <p className={styles.formDesc}>
             {mode === "login" ? "계정에 로그인하여 매장 관리를 시작하세요" : "새 계정을 만들고 바로 시작하세요"}
           </p>
@@ -136,7 +133,7 @@ const LoginPage = () => {
                       type="email"
                       placeholder="example@store.com"
                       className={styles.input}
-                      defaultValue={signedUpEmail} 
+                      defaultValue={signedUpEmail}
                       {...register("email", { required: "이메일을 입력하세요." })}
                     />
                     {errors.email && <span className={styles.errorText}>{errors.email.message}</span>}
