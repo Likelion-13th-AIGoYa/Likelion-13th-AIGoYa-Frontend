@@ -1,0 +1,757 @@
+/* src/css/OrderList.module.css */
+.orderListContainer {
+  padding: 24px;
+  background: #f8f9fb;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  padding-top: 110px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  z-index: 1000;
+}
+
+/* MainSales 스타일 통계 카드 그리드 */
+.statsContainer {
+  display: flex;
+  gap: 16px;
+  background: #f8f9fb;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.statsCard {
+  flex: 1;
+  min-width: 200px;
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-top: 3px solid;
+}
+
+.statsCard:nth-child(1) {
+  border-top-color: #4F46E5;
+}
+
+.statsCard:nth-child(2) {
+  border-top-color: #10B981;
+}
+
+.statsCard:nth-child(3) {
+  border-top-color: #F59E0B;
+}
+
+.statsCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.iconWrapper {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f3f4f6;
+}
+
+.statsCard:nth-child(1) .iconWrapper {
+  background: #EEF2FF;
+}
+
+.statsCard:nth-child(1) .icon {
+  color: #4F46E5;
+}
+
+.statsCard:nth-child(2) .iconWrapper {
+  background: #D1FAE5;
+}
+
+.statsCard:nth-child(2) .icon {
+  color: #10B981;
+}
+
+.statsCard:nth-child(3) .iconWrapper {
+  background: #FEF3C7;
+}
+
+.statsCard:nth-child(3) .icon {
+  color: #F59E0B;
+}
+
+.label {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mainValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.5px;
+}
+
+.changeRate {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.changeRate.up {
+  color: #059669;
+}
+
+.changeRate.down {
+  color: #DC2626;
+}
+
+.changeRate.changeNeutral {
+  color: #6B7280;
+}
+
+.changeLabel {
+  color: #9CA3AF;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* 컨트롤 섹션 */
+.controlSection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8eaed;
+  margin-bottom: 20px;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filterButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterButton:hover {
+  border-color: #1D4ED8;
+  color: #1D4ED8;
+}
+
+.filterButton.active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+  color: white;
+  font-weight: 600;
+}
+
+.searchAndActions {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+}
+
+.searchContainer {
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchIcon {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafafa;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  background: white;
+}
+
+.dateContainer {
+  min-width: 180px;
+}
+
+.dateIcon {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  z-index: 1;
+}
+
+.dateInput {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fafafa;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  background: white;
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.refreshButton:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+/* 테이블 섹션 */
+.tableSection {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8eaed;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafbfc;
+}
+
+.tableHeader h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.searchTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.orderCount {
+  font-size: 14px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.orderTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.orderTable thead {
+  background: #fafbfc;
+}
+
+.orderTable th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.sortableHeader {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.sortableHeader:hover {
+  background: #f0f1f3;
+}
+
+.sortIcon {
+  color: #6366f1;
+  font-weight: bold;
+}
+
+.orderTable td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+}
+
+.orderRow {
+  transition: background 0.2s;
+}
+
+.orderRow:hover {
+  background: #fafbfc;
+}
+
+/* 요약 행 좌측 펼침 버튼 */
+.expandButton {
+  margin-right: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.expandButton:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.orderIdText {
+  vertical-align: middle;
+  font-weight: 700;
+  color: #3B82F6;
+  font-family: 'Courier New', monospace;
+}
+
+.orderTime {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.orderProducts {
+  max-width: 300px;
+}
+
+/* 요약 행 제품 배지 */
+.productSummaryBadges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.productBadge {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.moreBadge {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: 1px solid #e0e7ff;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.totalQuantity {
+  text-align: center;
+  font-weight: 700;
+  color: #10b981;
+  font-size: 16px;
+}
+
+.totalPrice {
+  text-align: right;
+  font-weight: 700;
+  color: #111827;
+  font-size: 16px;
+}
+
+/* 상세 행(드롭다운) */
+.detailsRow td {
+  background: #fafbfc;
+  padding: 16px 20px;
+  border-top: 1px solid #eef2f7;
+}
+
+.detailProductsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.detailCard {
+  background: #ffffff;
+  border: 1px solid #e8eaed;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+
+.detailCard:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.detailName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.detailUnitPrice {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.detailMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.detailQty {
+  font-size: 13px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.detailSubtotal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* 수정 모드 수량 컨트롤 */
+.detailControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.qtyButton {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.qtyButton:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.qtyValue {
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #111827;
+}
+
+/* 액션 버튼 */
+.actions {
+  text-align: center;
+  min-width: 140px;
+}
+
+.normalActions, .editActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.editButton {
+  padding: 8px 16px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.editButton:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+.deleteButton {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.saveButton {
+  padding: 8px 16px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.saveButton:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.cancelEditButton {
+  padding: 8px 16px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.cancelEditButton:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+/* 데이터 없음 */
+.noData {
+  text-align: center;
+  color: #9ca3af;
+  font-style: italic;
+  padding: 60px;
+  font-size: 16px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .statsContainer {
+    gap: 12px;
+  }
+  
+  .statsCard {
+    min-width: 180px;
+  }
+  
+  .mainValue {
+    font-size: 20px;
+  }
+  
+  .searchAndActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .searchContainer {
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .orderListContainer {
+    padding: 16px;
+  }
+  
+  .statsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .statsCard {
+    min-width: unset;
+    padding: 20px;
+  }
+  
+  .mainValue {
+    font-size: 24px;
+  }
+  
+  .controlSection {
+    padding: 16px 20px;
+  }
+  
+  .filterButtons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .filterButton {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .tableContainer {
+    overflow-x: auto;
+  }
+  
+  .orderTable {
+    min-width: 800px;
+  }
+  
+  .orderTable th,
+  .orderTable td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  
+  .normalActions, .editActions {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .editButton, .deleteButton, .saveButton, .cancelEditButton {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .detailProductsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsContainer {
+    grid-template-columns: 1fr;
+  }
+  
+  .statsCard {
+    padding: 14px 16px;
+  }
+  
+  .mainValue {
+    font-size: 22px;
+  }
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.resetButton:hover {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
