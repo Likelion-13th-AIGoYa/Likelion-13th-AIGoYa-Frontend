@@ -5,7 +5,7 @@ import styles from "../css/MyPage.module.css";
 import Header from "../component/Header";
 import MyPageEdit from "../component/MyPageEdit";
 import MyPageProfileView from "../component/MyPageProfileView";
-import MyPagePassword from "../component/MyPagePassword"; 
+import MyPagePassword from "../component/MyPagePassword";
 
 const firstChar = (t, fb = "상") => {
   const s = (t ?? "").trim();
@@ -19,7 +19,7 @@ export default function MyPage() {
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
-  const [mode, setMode] = useState("profile"); 
+  const [mode, setMode] = useState("profile");
 
   useEffect(() => {
     (async () => {
@@ -49,7 +49,15 @@ export default function MyPage() {
     }
   };
 
-  if (loading) return <p className={styles.loading}>로딩중...</p>;
+  if (loading) {
+    return (
+      <div className={styles.spinnerWrapper}>
+        <div className={styles.spinner}></div>
+        <p>로딩중...</p>
+      </div>
+    );
+  }
+
   if (!store) return <p className={styles.loading}>데이터가 없어요.</p>;
 
   const name = store?.name ?? "";
@@ -94,8 +102,8 @@ export default function MyPage() {
                 가게 정보 수정
               </button>
               <button
-                className={`${styles.navItem} ${mode === "password" ? styles.active : ""}`} 
-                onClick={() => setMode("password")} 
+                className={`${styles.navItem} ${mode === "password" ? styles.active : ""}`}
+                onClick={() => setMode("password")}
               >
                 비밀번호 변경
               </button>
@@ -134,9 +142,9 @@ export default function MyPage() {
 
           {mode === "password" && (
             <MyPagePassword
-              storeId={store?.id ?? store?.storeId}   
+              storeId={store?.id ?? store?.storeId}
               onCancel={() => setMode("profile")}
-              onDone={() => setMode("profile")}       
+              onDone={() => setMode("profile")}
             />
           )}
         </section>
