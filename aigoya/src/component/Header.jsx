@@ -3,6 +3,7 @@ import { Menu, X, Star, BarChart3 } from 'lucide-react';
 import styles from '../css/Header.module.css';
 import { useNavigate } from "react-router-dom";
 import SideBar from './SideBar';
+import logo from "../image/mainLogoRemove.png";
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -54,7 +55,7 @@ const Header = () => {
                 {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
               <div className={styles.logo}>
-                <span className={styles.logoText}>POSMATE</span>
+                <img src={logo} alt='logo' className={styles.hederLogo} />
               </div>
             </div>
 
