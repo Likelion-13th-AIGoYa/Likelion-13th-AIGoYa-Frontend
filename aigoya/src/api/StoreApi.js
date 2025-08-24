@@ -51,15 +51,15 @@ api.interceptors.response.use(
 );
 
 // 가게 생성(회원가입) API
-export const createStore = async (storeData) => {
-    try {
-        const response = await api.post('/stores/create', storeData);
-        return response.data;
-    } catch (error) {
-        console.error('가게 생성 API 호출 오류:', error);
-        throw error;
-    }
-};
+// export const createStore = async (storeData) => {
+//     try {
+//         const response = await api.post('/stores/create', storeData);
+//         return response.data;
+//     } catch (error) {
+//         console.error('가게 생성 API 호출 오류:', error);
+//         throw error;
+//     }
+// };
 
 
 // 가게 로그인 API

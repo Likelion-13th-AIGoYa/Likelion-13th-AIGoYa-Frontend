@@ -35,30 +35,35 @@ export default function SignUpPage({ onDone }) {
         return score;
     }, [password]);
 
-    const onSubmit = async (data) => {
-        setIsLoading(true);
-        try {
-            const storeData = {
-                email: data.email,
-                phone: data.phone,
-                password: data.password
-            };
+    // const onSubmit = async (data) => {
+    //     setIsLoading(true);
+    //     try {
+    //         const storeData = {
+    //             email: data.email,
+    //             phone: data.phone,
+    //             password: data.password
+    //         };
 
-            const response = await createStore(storeData);
-            alert(`회원가입 성공! 가게가 생성되었습니다.`);
-            onDone?.(data.email);
-        } catch (error) {
-            if (error.response) {
-                alert(`회원가입 실패: ${error.response.status} - ${error.response.data?.message || '서버 오류'}`);
-            } else if (error.request) {
-                alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
-            } else {
-                alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    //         const response = await createStore(storeData);
+    //         alert(`회원가입 성공! 가게가 생성되었습니다.`);
+    //         onDone?.(data.email);
+    //     } catch (error) {
+    //         if (error.response) {
+    //             alert(`회원가입 실패: ${error.response.status} - ${error.response.data?.message || '서버 오류'}`);
+    //         } else if (error.request) {
+    //             alert("서버에 연결할 수 없습니다. 네트워크를 확인해주세요.");
+    //         } else {
+    //             alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    //         }
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // };
+
+    const onSubmit = async (data) => {
+        alert("테스트 환경에서는 회원가입이 불가능합니다.");
+        return;
+    }
 
     const onPhoneChange = (e) => {
         setValue("phone", formatPhone(e.target.value), { shouldDirty: true });
