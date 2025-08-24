@@ -98,12 +98,12 @@
 
 .categoryManageButton {
     width: 100%;
-    padding: min(10px, 1.2vh);
+    padding: min(15px, 2vh);
     background: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 4px;
     color: #666;
-    font-size: min(11px, 1.2vh);
+    font-size: min(14px, 1.5vh);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -118,7 +118,7 @@
 /* 중앙 메뉴 패널 */
 .centerPanel {
     flex: 1;
-    padding: 15px;
+    padding: 0 15px;
     background: #f5f6fa;
     display: flex;
     flex-direction: column;
