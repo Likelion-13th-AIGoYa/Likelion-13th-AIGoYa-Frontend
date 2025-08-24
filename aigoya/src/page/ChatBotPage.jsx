@@ -190,7 +190,7 @@ const ChatBotPage = () => {
                         className={styles.backToHomeBtn}
                         onClick={() => navigate("/")}
                     >
-                        ← 매출 분석 홈으로
+                        ← 홈으로 돌아가기
                     </button>
                 </div>
             </div>
