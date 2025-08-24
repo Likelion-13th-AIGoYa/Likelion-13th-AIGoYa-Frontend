@@ -7,6 +7,7 @@ import LoginPage from './page/LoginPage';
 import PosMachinePage from './page/PosMachinePage';
 import MyPage from './page/MyPage';
 import MyPageEdit from './component/MyPageEdit';
+import OrderList from './page/OrderList';
 
 
 const App = () => {
@@ -19,8 +20,7 @@ const App = () => {
           <Route path="/chatbot" element={<ChatBotPage />} />
           <Route path="/posMachine" element={<PosMachinePage />} />
           <Route path="/main/mypage" element={<MyPage />} />
-          
-          
+          <Route path="/main/orders" element={<OrderList />} />          
         </Routes>
       </BrowserRouter>
     </div>
