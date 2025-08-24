@@ -445,3 +445,21 @@ export const getTodaySales = async () => {
     throw error;
   }
 };
+
+// 시간대별 매출 분석
+export const getSalesByHour = async (date = null) => {
+  try {
+    console.log('📊 시간대별 매출 분석 요청:', date);
+    
+    // 날짜 파라미터가 없으면 오늘 날짜 사용
+    const queryDate = date || new Date().toISOString().split('T')[0];
+    const url = `/stores/me/analytics/sales-by-hour?date=${queryDate}`;
+    
+    const response = await api.get(url);
+    console.log('✅ 시간대별 매출 분석 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 시간대별 매출 분석 API 오류:', error);
+    throw error;
+  }
+};
