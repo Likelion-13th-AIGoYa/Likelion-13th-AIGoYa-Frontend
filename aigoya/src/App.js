@@ -8,6 +8,7 @@ import PosMachinePage from './page/PosMachinePage';
 import MyPage from './page/MyPage';
 import MyPageEdit from './component/MyPageEdit';
 import OrderList from './page/OrderList';
+import EmployeePage from './page/EmployeePage';
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/posMachine" element={<PosMachinePage />} />
           <Route path="/main/mypage" element={<MyPage />} />
           <Route path="/main/orders" element={<OrderList />} />          
+          <Route path="/Employee" element={<EmployeePage />} />
         </Routes>
       </BrowserRouter>
     </div>
