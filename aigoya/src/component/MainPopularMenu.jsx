@@ -1,41 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../css/MainPopularMenu.module.css";
-
-const popularMenus = [
-  { id: 1, name: "김치찌개", subtitle: "우리 집 시그니처 메뉴!", sales: 23 },
-  { id: 2, name: "제육볶음", subtitle: "점심 특선 메뉴", sales: 18 },
-  { id: 3, name: "된장찌개", subtitle: "고깃집 스타일의 칼칼한 찌개", sales: 15 },
-];
+import { getTopMenus } from "../api/StoreApi";
 
 function MainPopularMenu() {
+  const [popularMenus, setPopularMenus] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const res = await getTopMenus({ period: "DAILY", limit: 3 });
+        console.log("API 응답:", res);
+
+        const mapped = (res || []).map((it, idx) => ({
+          id: `${it.menuName}-${idx}`,
+          name: it.menuName,
+          subtitle: it.categoryName || "",      
+          sales: it.salesCount ?? 0,            
+        }));
+
+        setPopularMenus(mapped);
+      } catch (e) {
+        console.error("인기 메뉴(API) 실패:", e);
+        setErr("인기 메뉴를 불러오지 못했어요.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
+  if (loading) return <p className={styles.loading}>로딩중...</p>;
+  if (err) return <p className={styles.error}>{err}</p>;
+
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}> 🔥 오늘 인기 메뉴</h2>
+      <h2 className={styles.title}>🔥 오늘 인기 메뉴</h2>
 
       <ul className={styles.list}>
-        {popularMenus.map((menu, index) => (
-          <li key={menu.id} className={styles.card}>
-            <div
-              className={`${styles.rankBadge} ${index === 1 ? styles.rankSilver : index === 2 ? styles.rankBronze : ""
+        {popularMenus.length === 0 ? (
+          <li className={styles.empty}>오늘은 인기 데이터가 없어요.</li>
+        ) : (
+          popularMenus.map((menu, index) => (
+            <li key={menu.id} className={styles.card}>
+              <div
+                className={`${styles.rankBadge} ${
+                  index === 1 ? styles.rankSilver : index === 2 ? styles.rankBronze : ""
                 }`}
-            >
-              <span className={styles.BadgeIndex}>{index + 1}</span>
-            </div>
+              >
+                <span className={styles.BadgeIndex}>{index + 1}</span>
+              </div>
 
-            <div className={styles.info}>
-              <div className={styles.name}>{menu.name}</div>
-              <div className={styles.subtitle}>{menu.subtitle}</div>
-            </div>
+              <div className={styles.info}>
+                <div className={styles.name}>{menu.name}</div>
+                <div className={styles.subtitle}>{menu.subtitle}</div>
+              </div>
 
-            <div className={styles.sales}>
-              <strong>{menu.sales}</strong>그릇
-            </div>
-          </li>
-        ))}
+              <div className={styles.sales}>
+                <strong>{menu.sales}</strong>그릇
+              </div>
+            </li>
+          ))
+        )}
       </ul>
-
     </section>
   );
 }
 
-export default MainPopularMenu
+export default MainPopularMenu;

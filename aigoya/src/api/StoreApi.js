@@ -463,3 +463,44 @@ export const getSalesByHour = async (date = null) => {
     throw error;
   }
 };
+
+// 메뉴 분석(인기/비인기) API 
+export const getMenuAnalysis = async ({
+  type = "TOP",       
+  period = "DAILY",   
+  limit = 5,          
+} = {}) => {
+  try {
+    const { data } = await api.get("/stores/me/analytics/menu-analysis", {
+      params: { type, period, limit },
+    });
+    return data;
+
+  } catch (error) {
+    const status = error.response?.status;
+    if (status === 400) {
+      error.userMessage = "요청 파라미터가 올바르지 않습니다.";
+    } else if (status === 401) {
+      error.userMessage = "인증이 만료되었습니다. 다시 로그인해주세요.";
+    } else if (status === 403) {
+      error.userMessage = "접근 권한이 없습니다.";
+    } else if (status === 404) {
+      error.userMessage = "분석 데이터를 찾을 수 없습니다.";
+    } else if (status >= 500) {
+      error.userMessage = "서버 오류가 발생했습니다. 잠시 후 다시 시도하세요.";
+    }
+    console.error("메뉴 분석 API 오류:", {
+      message: error.message,
+      status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
+};
+
+// 편의 래퍼들
+export const getTopMenus = (opts = {}) =>
+  getMenuAnalysis({ type: "TOP", ...opts });
+
+export const getBottomMenus = (opts = {}) =>
+  getMenuAnalysis({ type: "BOTTOM", ...opts });
