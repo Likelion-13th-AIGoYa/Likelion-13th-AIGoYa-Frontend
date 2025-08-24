@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Monitor } from 'lucide-react';
 import styles from '../css/PosMachinePage.module.css';
 import {
   getMenus, addMenu, deleteMenu, updateMenu,
@@ -6,7 +8,16 @@ import {
   getCategories, createCategory, updateCategory, deleteCategory
 } from "../api/StoreApi";
 
+
+
 const PosMachinePage = ({ storeId = 1 }) => {
+
+  const navigate = useNavigate();
+
+  const handlePosExit = () => {
+    navigate('/main');
+  };
+
   // 기본 상태
   const [selectedCategory, setSelectedCategory] = useState('');
   const [orderItems, setOrderItems] = useState([]);
@@ -358,6 +369,12 @@ const PosMachinePage = ({ storeId = 1 }) => {
 
       {/* 왼쪽 카테고리 패널 */}
       <div className={styles.leftPanel}>
+        <div className={styles.posExitSection}>
+          <button className={styles.posExitButton} onClick={handlePosExit}>
+            <Monitor size={20} className={styles.posExitIcon} />
+            <span>pos 종료</span>
+          </button>
+        </div>
         {categories.map((category) => (
           <button
             key={category.id}

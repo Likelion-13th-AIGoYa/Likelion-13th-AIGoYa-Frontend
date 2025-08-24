@@ -812,3 +812,42 @@
     white-space: nowrap;
     min-height: 24px;
 }
+
+
+/* POS 종료 버튼 섹션 - posMachinePage.module.css에 추가 */
+.posExitSection {
+  border-bottom: 1px solid #e8e8e8;
+  margin-bottom: 10px;
+}
+
+.posExitButton {
+  width: 100%;
+  background: #FF3030 ;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.posExitButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  background: #B91C1C;
+}
+
+.posExitButton:active {
+  transform: translateY(0);
+}
+
+.posExitIcon {
+  flex-shrink: 0;
+}
