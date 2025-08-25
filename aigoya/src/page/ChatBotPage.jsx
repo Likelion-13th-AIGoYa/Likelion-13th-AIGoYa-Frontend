@@ -2,8 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from '../css/ChatBotPage.module.css';
-import { getMyStore } from '../api/StoreApi';
-import { sendChatMessage } from '../api/StoreApi';
+import { getChatRooms, getChatHistory, sendChatMessage } from '../api/StoreApi';
 
 const defaultSuggestions = [
     "오늘 매출 요약 보여줘",
@@ -21,15 +20,13 @@ const ChatBotPage = () => {
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [chatSessions, setChatSessions] = useState([]);
-    const [currentSessionId, setCurrentSessionId] = useState(null);
-    const [storeInfo, setStoreInfo] = useState(null);
+    const [chatRooms, setChatRooms] = useState([]);
+    const [currentChatRoomId, setCurrentChatRoomId] = useState(null);
     const messageEndRef = useRef(null);
 
-    // storeInfo 관련 useEffect 제거 (필요없음)
+    // 컴포넌트 마운트 시 채팅방 목록 로드
     useEffect(() => {
-        // 새로운 채팅 세션 시작
-        startNewSession();
+        loadChatRooms();
 
         // 초기 메시지 설정
         const initialMessage = location.state?.initialMessage;
@@ -44,57 +41,90 @@ const ChatBotPage = () => {
         messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isTyping]);
 
-    const startNewSession = () => {
-        const newSessionId = Date.now();
-        const newSession = {
-            id: newSessionId,
-            title: "새로운 채팅",
-            messages: [{ type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }],
-            timestamp: new Date()
-        };
+    // 채팅방 목록 로드
+    const loadChatRooms = async () => {
+        try {
+            const rooms = await getChatRooms();
+            setChatRooms(rooms);
 
-        setChatSessions(prev => [newSession, ...prev]);
-        setCurrentSessionId(newSessionId);
-        setMessages(newSession.messages);
-    };
-
-    const switchToSession = (sessionId) => {
-        const session = chatSessions.find(s => s.id === sessionId);
-        if (session) {
-            setCurrentSessionId(sessionId);
-            setMessages(session.messages);
+            // 첫 번째 채팅방이 있으면 자동 선택, 없으면 새 채팅 시작
+            if (rooms.length > 0) {
+                switchToChatRoom(rooms[0].chatRoomId);
+            } else {
+                startNewChat();
+            }
+        } catch (error) {
+            console.error('채팅방 목록 로드 실패:', error);
+            startNewChat(); // 실패 시 새 채팅 시작
         }
     };
 
-    const updateCurrentSession = (newMessages) => {
-        setChatSessions(prev => prev.map(session => {
-            if (session.id === currentSessionId) {
-                return {
-                    ...session,
-                    messages: newMessages,
-                    title: newMessages[1]?.text?.substring(0, 30) + "..." || "새로운 채팅"
-                };
-            }
-            return session;
-        }));
+    // 새 채팅 시작
+    const startNewChat = () => {
+        setCurrentChatRoomId(null);
+        setMessages([{ type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }]);
     };
 
-    const sendToAPI = async (msg) => {
-    setIsTyping(true);
-    try {
-        const response = await sendChatMessage(msg);
-        const newMessages = [...messages, { type: "bot", text: response.result }];
-        setMessages(newMessages);
-        updateCurrentSession(newMessages);
-    } catch (error) {
-        console.error('API 호출 오류:', error);
-        const errorMessages = [...messages, { type: "bot", text: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요." }];
-        setMessages(errorMessages);
-        updateCurrentSession(errorMessages);
-    } finally {
-        setIsTyping(false);
-    }
-};
+    // 특정 채팅방으로 전환
+    const switchToChatRoom = async (chatRoomId) => {
+        try {
+            setCurrentChatRoomId(chatRoomId);
+            const history = await getChatHistory(chatRoomId);
+
+            // API 응답을 채팅 UI 형식으로 변환
+            const convertedMessages = [
+                { type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }
+            ];
+
+            history.forEach(item => {
+                convertedMessages.push({
+                    type: item.role === "USER" ? "user" : "bot",
+                    text: item.content,
+                    createdAt: item.createdAt
+                });
+            });
+
+            setMessages(convertedMessages);
+        } catch (error) {
+            console.error('채팅 히스토리 로드 실패:', error);
+            setMessages([{ type: "bot", text: "채팅 기록을 불러올 수 없습니다." }]);
+        }
+    };
+
+    const sendToAPI = async (msg, currentMessages, retryCount = 0) => {
+        const maxRetries = 1; // 최대 1번 재시도
+
+        try {
+            const response = await sendChatMessage(currentChatRoomId, msg);
+
+            // 새 채팅방이 생성된 경우 chatRoomId 업데이트 및 목록 갱신
+            if (currentChatRoomId === null && response.chatRoomId) {
+                setCurrentChatRoomId(response.chatRoomId);
+                loadChatRooms(); // 채팅방 목록 다시 로드
+            }
+
+            const newMessages = [...currentMessages, { type: "bot", text: response.report }];
+            setMessages(newMessages);
+            setIsTyping(false); // 성공 시 로딩 해제
+        } catch (error) {
+            console.error(`API 호출 오류 (시도 ${retryCount + 1}/${maxRetries + 1}):`, error);
+
+            // 재시도 가능한 경우 재시도
+            if (retryCount < maxRetries) {
+                console.log('재시도 중...');
+                // 잠시 대기 후 재시도 (1초)
+                setTimeout(() => {
+                    sendToAPI(msg, currentMessages, retryCount + 1);
+                }, 1000);
+                return;
+            }
+
+            // 재시도 횟수 초과 시 오류 메시지 표시
+            const errorMessages = [...currentMessages, { type: "bot", text: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요." }];
+            setMessages(errorMessages);
+            setIsTyping(false); // 오류 시에도 로딩 해제
+        }
+    };
 
     const handleSendMessage = (message = input) => {
         const trimmed = message.trim();
@@ -102,9 +132,9 @@ const ChatBotPage = () => {
 
         const newMessages = [...messages, { type: "user", text: trimmed }];
         setMessages(newMessages);
-        updateCurrentSession(newMessages);
         setInput("");
-        sendToAPI(trimmed);
+        setIsTyping(true); // 로딩 시작
+        sendToAPI(trimmed, newMessages); // 현재 메시지 상태 전달
     };
 
     const handleSend = () => {
@@ -131,27 +161,24 @@ const ChatBotPage = () => {
                     <h3>채팅 기록</h3>
                     <button
                         className={styles.newChatBtn}
-                        onClick={startNewSession}
+                        onClick={startNewChat}
                     >
                         + 새 채팅
                     </button>
                 </div>
                 <div className={styles.chatList}>
-                    {chatSessions.map(session => (
-                        <div
-                            key={session.id}
-                            className={`${styles.chatItem} ${currentSessionId === session.id ? styles.active : ''}`}
-                            onClick={() => switchToSession(session.id)}
-                        >
-                            <div className={styles.chatTitle}>{session.title}</div>
-                            <div className={styles.chatTime}>
-                                {session.timestamp.toLocaleTimeString('ko-KR', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
+                    {chatRooms
+                        .slice()  // 원본 배열 보호
+                        .reverse()  // 최근 채팅방부터 나오게
+                        .map(room => (
+                            <div
+                                key={room.chatRoomId}
+                                className={`${styles.chatItem} ${currentChatRoomId === room.chatRoomId ? styles.active : ''}`}
+                                onClick={() => switchToChatRoom(room.chatRoomId)}
+                            >
+                                <div className={styles.chatTitle}>{room.title}</div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
                 <div className={styles.homeButton}>
                     <button

@@ -50,17 +50,48 @@ api.interceptors.response.use(
   }
 );
 
-// AI 챗봇 API 수정
-export const sendChatMessage = async (message) => {
+// AI 챗봇 API
+export const sendChatMessage = async (chatRoomId, message) => {
     try {
-        console.log('🤖 AI 챗봇 메시지 전송:', { message });
+        console.log('🤖 AI 챗봇 메시지 전송:', { chatRoomId, message });
         
-        const response = await api.post('/api/ai/chat', { message });
+        const response = await api.post('/ai/chat', { 
+            chatRoomId, 
+            message 
+        });
         
         console.log('✅ AI 챗봇 응답:', response.data);
         return response.data;
     } catch (error) {
         console.error('❌ AI 챗봇 API 오류:', error);
+        throw error;
+    }
+};
+
+// 채팅방 목록 조회 API
+export const getChatRooms = async () => {
+    try {
+        console.log('🔄 채팅방 목록 조회 요청');
+        
+        const response = await api.get('/ai/chat/rooms');
+        console.log('✅ 채팅방 목록 조회 완료:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('❌ 채팅방 목록 조회 API 오류:', error);
+        throw error;
+    }
+};
+
+// 채팅 히스토리 조회 API
+export const getChatHistory = async (chatRoomId) => {
+    try {
+        console.log('🔄 채팅 히스토리 조회 요청:', chatRoomId);
+        
+        const response = await api.get(`/ai/chat/history/${chatRoomId}`);
+        console.log('✅ 채팅 히스토리 조회 완료:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('❌ 채팅 히스토리 조회 API 오류:', error);
         throw error;
     }
 };
