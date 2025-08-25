@@ -46,8 +46,8 @@ const LoginPage = () => {
     setError,
   } = useForm({
     defaultValues: {
-      email: "test1@naver.com",
-      password: "11111111",
+      email: "eval@elroy.kr",
+      password: "password123",
       keepLoggedIn: false,
       // 바로 로그인 할 수 있도록 테스트 아이디 미리 입력
     },
