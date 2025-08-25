@@ -79,18 +79,7 @@ const Header = () => {
               <Star className={styles.starIcon} size={12} />
               <span className={styles.notificationText}>
                 "음식이 정말 맛있어요! 김치찌개 강추합니다" - 네이버리뷰
-              </span>
-            </div>
-            <div className={styles.notificationItem}>
-              <Star className={styles.starIcon} size={12} />
-              <span className={styles.notificationText}>
-                "사장님이 친절하시고 양도 푸짐해요. 재방문 의사 있습니다" - 배달앱 리뷰
-              </span>
-            </div>
-            <div className={styles.notificationItem}>
-              <Star className={`${styles.starIcon} ${styles.orange}`} size={12} />
-              <span className={styles.notificationText}>
-                "가격 대비 만족도 높아요. 동료들과 맛있었습니다" - 구글리뷰
+
               </span>
             </div>
           </div>
@@ -104,7 +93,7 @@ const Header = () => {
         handleLogout={handleLogout} 
       />
     </>
-  );
+  )
 };
 
 export default Header;
