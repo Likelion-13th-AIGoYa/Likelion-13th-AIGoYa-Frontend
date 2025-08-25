@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/EmployeePage.module.css';
 import { getEmployees, addEmployee, updateEmployee, deleteEmployee } from '../api/StoreApi';
+import Header from '../component/Header';
 
 const DAYS_OF_WEEK = [
   { key: 'MONDAY', label: '월', dayNum: 1 },
@@ -354,6 +355,7 @@ const EmployeePage = () => {
 
   return (
     <div className={styles.container}>
+      <Header />
       {/* 헤더 */}
       <div className={styles.header}>
         <h1 className={styles.title}>직원 관리</h1>

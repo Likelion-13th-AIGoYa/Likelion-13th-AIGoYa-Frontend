@@ -4,7 +4,7 @@
   margin: 0 auto;
   background-color: #f8fafc;
   min-height: 720px;
-  min-width: 1280px;
+  padding-top: 110px;
 }
 
 .loading {
@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   height: 200px;
+  padding-top: 110px;
   font-size: 16px;
   color: #666;
 }
@@ -45,7 +46,6 @@
 
 .addButton:hover {
   background: linear-gradient(135deg, #4338ca 0%, #2563eb 100%);
-  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
@@ -67,7 +67,6 @@
 }
 
 .statCard:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -146,7 +145,8 @@
 }
 
 /* 버튼들 */
-.editButton, .deleteButton {
+.editButton,
+.deleteButton {
   border: none;
   border-radius: 6px;
   padding: 6px 12px;
@@ -331,7 +331,8 @@
 .timeInput {
   flex: 1;
   padding: 10px;
-  padding-right: 32px; /* 드롭다운 버튼 공간 확보 */
+  padding-right: 32px;
+  /* 드롭다운 버튼 공간 확보 */
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 16px;
@@ -459,7 +460,8 @@
   border-top: 1px solid #e5e7eb;
 }
 
-.cancelButton, .submitButton {
+.cancelButton,
+.submitButton {
   border: none;
   border-radius: 8px;
   padding: 12px 20px;
@@ -490,36 +492,33 @@
 
 /* 반응형 - 1280px 이하에서만 적용 */
 @media (max-width: 1280px) {
-  .container {
-    padding: 16px;
-  }
-  
   .header {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
   }
-  
+
   .statsContainer {
     grid-template-columns: 1fr;
   }
-  
+
   .timeGroup {
     grid-template-columns: 1fr;
   }
-  
+
   .table {
     font-size: 12px;
   }
-  
-  .table th, .table td {
+
+  .table th,
+  .table td {
     padding: 12px 8px;
   }
-  
+
   .modalActions {
     flex-direction: column;
   }
-  
+
   .todayWorkers {
     grid-template-columns: 1fr;
   }
