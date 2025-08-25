@@ -597,3 +597,75 @@ export const getWeatherSalesTrend = async () => {
     throw error;
   }
 };
+
+// 직원 목록 조회
+export const getEmployees = async () => {
+  try {
+    console.log('🔄 직원 목록 조회 요청');
+    
+    const response = await api.get('/stores/me/employees');
+    console.log('✅ 직원 목록 조회 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 목록 조회 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 등록
+export const addEmployee = async (employeeData) => {
+  try {
+    console.log('🔄 직원 등록 요청:', employeeData);
+    
+    const response = await api.post('/stores/me/employees', {
+      name: employeeData.name,
+      role: employeeData.role,
+      hourlyWage: employeeData.hourlyWage,
+      workStartTime: employeeData.workStartTime,
+      workEndTime: employeeData.workEndTime,
+      workDays: employeeData.workDays
+    });
+    
+    console.log('✅ 직원 등록 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 등록 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 정보 수정
+export const updateEmployee = async (employeeId, employeeData) => {
+  try {
+    console.log('🔄 직원 정보 수정 요청:', employeeId, employeeData);
+    
+    const response = await api.put(`/stores/me/employees/${employeeId}`, {
+      name: employeeData.name,
+      role: employeeData.role,
+      hourlyWage: employeeData.hourlyWage,
+      workStartTime: employeeData.workStartTime,
+      workEndTime: employeeData.workEndTime,
+      workDays: employeeData.workDays
+    });
+    
+    console.log('✅ 직원 정보 수정 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 정보 수정 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 삭제
+export const deleteEmployee = async (employeeId) => {
+  try {
+    console.log('🔄 직원 삭제 요청:', employeeId);
+    
+    const response = await api.delete(`/stores/me/employees/${employeeId}`);
+    console.log('✅ 직원 삭제 완료');
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 삭제 API 오류:', error);
+    throw error;
+  }
+};

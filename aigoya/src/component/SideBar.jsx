@@ -11,7 +11,7 @@ const SideBar = ({ isMenuOpen, setIsMenuOpen, handleLogout }) => {
         { icon: Home, text: '대시보드', path: '/main' },
         { icon: Bot, text: '챗봇', path: '/chatbot' },
         { icon: BarChart3, text: '매출 관리', path: '/main/orders' },
-        { icon: Users, text: '직원 관리', path: '/main' },
+        { icon: Users, text: '직원 관리', path: '/Employee' },
     ];
 
     const handleMenuClick = (item) => {
