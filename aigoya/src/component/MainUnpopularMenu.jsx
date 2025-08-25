@@ -11,7 +11,7 @@ function MainUnpopularMenu() {
     const fetchWeeklyBottom = async () => {
       try {
         const res = await getBottomMenus({ period: "WEEKLY", limit: 3 });
-        console.log("BOTTOM(WEEKLY) 응답:", res);
+        // console.log("BOTTOM(WEEKLY) 응답:", res);
 
         const mapped = (res || []).map((it, idx) => ({
           id: `${it.menuName}-${idx}`,         

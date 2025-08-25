@@ -73,11 +73,11 @@ const LoginPage = () => {
         sessionStorage.setItem("accessToken", response.accessToken);
       }
 
-      console.log("로그인 성공! 서버 응답:", response);
+      // console.log("로그인 성공! 서버 응답:", response);
       navigate("/main");
 
     } catch (error) {
-      console.error("로그인 API 오류:", error);
+      // console.error("로그인 API 오류:", error);
       setError("password", {
         type: "manual",
         message: "이메일 또는 비밀번호가 일치하지 않습니다.",

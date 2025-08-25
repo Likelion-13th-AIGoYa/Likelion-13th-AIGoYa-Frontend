@@ -11,7 +11,7 @@ function MainPopularMenu() {
     const fetch = async () => {
       try {
         const res = await getTopMenus({ period: "DAILY", limit: 3 });
-        console.log("API 응답:", res);
+        // console.log("API 응답:", res);
 
         const mapped = (res || []).map((it, idx) => ({
           id: `${it.menuName}-${idx}`,
@@ -22,7 +22,7 @@ function MainPopularMenu() {
 
         setPopularMenus(mapped);
       } catch (e) {
-        console.error("인기 메뉴(API) 실패:", e);
+        // console.error("인기 메뉴(API) 실패:", e);
         setErr("인기 메뉴를 불러오지 못했어요.");
       } finally {
         setLoading(false);

@@ -47,7 +47,7 @@ const MainChart = () => {
   };
 
   const salesData = useMemo(() => {
-    console.log('rawSalesData 처리 시작:', rawSalesData);
+    // console.log('rawSalesData 처리 시작:', rawSalesData);
 
     const filtered = rawSalesData.filter(item => {
       let h;
@@ -56,12 +56,12 @@ const MainChart = () => {
         // orderedAt이 있는 경우 Date 객체로 변환 후 KST 시간 추출
         const date = new Date(item.orderedAt);
         h = date.getHours(); // 브라우저 로컬 시간 (KST)
-        console.log(`orderedAt 변환: ${item.orderedAt} → ${h}시`);
+        // console.log(`orderedAt 변환: ${item.orderedAt} → ${h}시`);
       } else if (item.hour !== undefined) {
         // hour만 있는 경우, 서버가 UTC로 주는지 확인
         const originalHour = Number(item.hour);
         h = convertUTCtoKST(originalHour); // UTC → KST 변환
-        console.log(`hour 변환: ${originalHour}(UTC) → ${h}시(KST)`);
+        // console.log(`hour 변환: ${originalHour}(UTC) → ${h}시(KST)`);
       } else {
         console.warn('시간 정보가 없는 아이템:', item);
         return false;
@@ -104,7 +104,7 @@ const MainChart = () => {
           hourText = `${String(displayHour).padStart(2, '0')}:00`;
         }
 
-        console.log(`최종 표시: ${item.hour || item.orderedAt} → ${hourText}`);
+        // console.log(`최종 표시: ${item.hour || item.orderedAt} → ${hourText}`);
 
         return {
           time: hourText,
