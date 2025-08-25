@@ -116,10 +116,16 @@ export default function SignUpPage({ onDone }) {
                 className={styles.input}
                 placeholder="비밀번호를 입력하세요"
                 {...register("password", {
-                    required: "비밀번호를 입력하세요."
+                    required: "비밀번호를 입력하세요.",
+                    pattern: {
+                        value: /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
+                        message: "비밀번호는 특수문자를 포함하고 8자 이상이어야 합니다."
+                    }
                 })}
             />
-            {errors.password && <span className={styles.errorText}>{errors.password.message}</span>}
+            {errors.password && (
+                <span className={styles.errorText}>{errors.password.message}</span>
+            )}
 
             {/* 비밀번호 확인 */}
             <label className={styles.label} htmlFor="confirmPassword">비밀번호 확인</label>
