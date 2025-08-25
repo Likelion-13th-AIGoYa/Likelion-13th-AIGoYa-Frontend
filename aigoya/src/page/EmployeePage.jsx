@@ -197,7 +197,7 @@ const EmployeePage = () => {
       const data = await getEmployees();
       setEmployees(data);
     } catch (error) {
-      console.error('직원 목록 조회 실패:', error);
+      // console.error('직원 목록 조회 실패:', error);
     } finally {
       setIsLoading(false);
     }
@@ -321,7 +321,7 @@ const EmployeePage = () => {
       await fetchEmployees();
       closeModal();
     } catch (error) {
-      console.error('직원 저장 실패:', error);
+      // console.error('직원 저장 실패:', error);
       alert('직원 정보 저장에 실패했습니다.');
     }
   };
@@ -334,7 +334,7 @@ const EmployeePage = () => {
       await deleteEmployee(employeeId);
       await fetchEmployees();
     } catch (error) {
-      console.error('직원 삭제 실패:', error);
+      // console.error('직원 삭제 실패:', error);
       alert('직원 삭제에 실패했습니다.');
     }
   };

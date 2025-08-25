@@ -54,7 +54,7 @@ const ChatBotPage = () => {
                 startNewChat();
             }
         } catch (error) {
-            console.error('채팅방 목록 로드 실패:', error);
+            // console.error('채팅방 목록 로드 실패:', error);
             startNewChat(); // 실패 시 새 채팅 시작
         }
     };
@@ -86,7 +86,7 @@ const ChatBotPage = () => {
 
             setMessages(convertedMessages);
         } catch (error) {
-            console.error('채팅 히스토리 로드 실패:', error);
+            // console.error('채팅 히스토리 로드 실패:', error);
             setMessages([{ type: "bot", text: "채팅 기록을 불러올 수 없습니다." }]);
         }
     };
@@ -107,11 +107,11 @@ const ChatBotPage = () => {
             setMessages(newMessages);
             setIsTyping(false); // 성공 시 로딩 해제
         } catch (error) {
-            console.error(`API 호출 오류 (시도 ${retryCount + 1}/${maxRetries + 1}):`, error);
+            // console.error(`API 호출 오류 (시도 ${retryCount + 1}/${maxRetries + 1}):`, error);
 
             // 재시도 가능한 경우 재시도
             if (retryCount < maxRetries) {
-                console.log('재시도 중...');
+                // console.log('재시도 중...');
                 // 잠시 대기 후 재시도 (1초)
                 setTimeout(() => {
                     sendToAPI(msg, currentMessages, retryCount + 1);

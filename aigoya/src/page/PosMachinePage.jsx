@@ -54,7 +54,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
         setMenuItems(menusData);
         if (categoriesData.length > 0) setSelectedCategory(categoriesData[0].name);
       } catch (error) {
-        console.error("데이터 로딩 실패:", error);
+        // console.error("데이터 로딩 실패:", error);
         alert("데이터를 불러오는데 실패했습니다.");
       } finally {
         setLoading(false);
@@ -75,7 +75,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setShowCategoryModal(false);
       alert("카테고리가 추가되었습니다!");
     } catch (error) {
-      console.error("카테고리 추가 실패:", error);
+      // console.error("카테고리 추가 실패:", error);
       alert("카테고리 추가에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -94,7 +94,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setShowEditCategoryModal(false);
       alert("카테고리가 수정되었습니다!");
     } catch (error) {
-      console.error("카테고리 수정 실패:", error);
+      // console.error("카테고리 수정 실패:", error);
       alert("카테고리 수정에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -114,7 +114,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       }
       alert("카테고리가 삭제되었습니다!");
     } catch (error) {
-      console.error("카테고리 삭제 실패:", error);
+      // console.error("카테고리 삭제 실패:", error);
       alert("카테고리 삭제에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -139,7 +139,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setShowAddModal(false);
       alert("메뉴가 추가되었습니다!");
     } catch (error) {
-      console.error("메뉴 추가 실패:", error);
+      // console.error("메뉴 추가 실패:", error);
       alert("메뉴 추가에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -157,7 +157,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setShowEditModal(false);
       alert("메뉴가 수정되었습니다!");
     } catch (error) {
-      console.error("메뉴 수정 실패:", error);
+      // console.error("메뉴 수정 실패:", error);
       alert("메뉴 수정에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -173,7 +173,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setMenuItems(updatedMenus);
       alert("메뉴가 삭제되었습니다!");
     } catch (error) {
-      console.error("메뉴 삭제 실패:", error);
+      // console.error("메뉴 삭제 실패:", error);
       alert("메뉴 삭제에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -228,7 +228,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setShowOrderCompleteModal(true);
       alert("주문이 완료되었습니다!");
     } catch (error) {
-      console.error("결제 실패:", error);
+      // console.error("결제 실패:", error);
       alert("결제에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -241,7 +241,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       const data = await getOrders();
       setOrders(data);
     } catch (error) {
-      console.error("주문 목록 불러오기 실패:", error);
+      // console.error("주문 목록 불러오기 실패:", error);
       alert("주문 목록을 불러오는데 실패했습니다.");
     } finally {
       setLoading(false);
@@ -261,7 +261,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       await fetchOrders();
       alert("주문이 취소되었습니다.");
     } catch (error) {
-      console.error("주문 취소 실패:", error);
+      // console.error("주문 취소 실패:", error);
       alert("주문 취소에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -312,7 +312,7 @@ const PosMachinePage = ({ storeId = 1 }) => {
       setEditingOrder(null);
       alert("주문이 수정되었습니다.");
     } catch (error) {
-      console.error("주문 수정 실패:", error);
+      // console.error("주문 수정 실패:", error);
       alert("주문 수정에 실패했습니다. (API 권한 문제)");
     } finally {
       setLoading(false);

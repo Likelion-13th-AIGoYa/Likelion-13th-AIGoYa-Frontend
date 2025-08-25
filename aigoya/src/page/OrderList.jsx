@@ -102,7 +102,7 @@ const formatYMDLocal = (d) => {
       const data = await getOrders();
       setOrders(data);
     } catch (error) {
-      console.error("주문 목록 불러오기 실패:", error);
+      // console.error("주문 목록 불러오기 실패:", error);
       alert("주문 목록을 불러오는데 실패했습니다.");
     } finally {
       setLoading(false);
@@ -118,7 +118,7 @@ const formatYMDLocal = (d) => {
       await fetchOrders();
       alert("주문이 취소되었습니다.");
     } catch (error) {
-      console.error("주문 취소 실패:", error);
+      // console.error("주문 취소 실패:", error);
       alert("주문 취소에 실패했습니다.");
     } finally {
       setLoading(false);
@@ -183,7 +183,7 @@ const formatYMDLocal = (d) => {
       setEditingOrder(null);
       alert("주문이 수정되었습니다.");
     } catch (error) {
-      console.error("주문 수정 실패:", error);
+      // console.error("주문 수정 실패:", error);
       alert("주문 수정에 실패했습니다.");
     } finally {
       setLoading(false);

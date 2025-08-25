@@ -11,7 +11,7 @@ function MainWeather() {
     const fetchWeather = async () => {
       try {
         const res = await getWeatherSalesTrend();
-        console.log("날씨/트렌드 응답:", res);
+        // console.log("날씨/트렌드 응답:", res);
 
         const mapped = {
           temperature: res.temperature,
@@ -21,7 +21,7 @@ function MainWeather() {
 
         setWeather(mapped);
       } catch (e) {
-        console.error("날씨 트렌드 API 실패:", e);
+        // console.error("날씨 트렌드 API 실패:", e);
         setErr("날씨 데이터를 불러오지 못했어요.");
       } finally {
         setLoading(false);

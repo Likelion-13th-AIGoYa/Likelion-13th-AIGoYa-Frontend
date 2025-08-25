@@ -37,7 +37,7 @@ const MainSales = () => {
           }
         });
       } catch (error) {
-        console.error('매출 데이터 로딩 실패:', error);
+        // console.error('매출 데이터 로딩 실패:', error);
       } finally {
         setLoading(false);
       }
