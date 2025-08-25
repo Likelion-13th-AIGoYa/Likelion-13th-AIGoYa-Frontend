@@ -126,12 +126,6 @@
   gap: 30px;
 }
 
-.notificationItem {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-}
 
 .starIcon {
   color: #FFD700;
@@ -145,9 +139,8 @@
 .notificationText {
   font-size: 11px;
   color: white;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 350px;
+  max-width: 1280px;
+  white-space: nowrap;
 }
 
 /* 사이드 메뉴 */
@@ -241,17 +234,10 @@
     display: none;
   }
   
-  .notificationContainer {
-    gap: 15px;
-  }
-  
-  .notificationItem:nth-child(3) {
-    display: none;
-  }
   
   .notificationText {
     font-size: 10px;
-    max-width: 180px;
+    max-width: 400px;
   }
 }
 
@@ -260,7 +246,4 @@
     display: none;
   }
   
-  .notificationItem:nth-child(2) {
-    display: none;
-  }
 }
