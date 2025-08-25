@@ -50,15 +50,12 @@ api.interceptors.response.use(
   }
 );
 
-// AI 챗봇 API 추가
-export const sendChatMessage = async (message, storeId) => {
+// AI 챗봇 API 수정
+export const sendChatMessage = async (message) => {
     try {
-        console.log('🤖 AI 챗봇 메시지 전송:', { message, storeId });
+        console.log('🤖 AI 챗봇 메시지 전송:', { message });
         
-        const response = await api.post('/api/ai/chat', 
-            { message }, 
-            { params: { storeId } }
-        );
+        const response = await api.post('/api/ai/chat', { message });
         
         console.log('✅ AI 챗봇 응답:', response.data);
         return response.data;
