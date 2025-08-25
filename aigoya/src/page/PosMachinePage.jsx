@@ -726,9 +726,9 @@ const PosMachinePage = ({ storeId = 1 }) => {
                   <h4>주문 상품:</h4>
                   {completedOrder.orderProducts?.map((item, index) => (
                     <div key={index} className={styles.orderProductItem}>
-                      <span>{item.product.productName}</span>
-                      <span>x{item.quantity}</span>
-                      <span>{(item.product.price * item.quantity).toLocaleString()}원</span>
+                      <div>{item.product.productName}</div>
+                      <div>x{item.quantity}</div>
+                      <div>{(item.product.price * item.quantity).toLocaleString()}원</div>
                     </div>
                   ))}
                 </div>

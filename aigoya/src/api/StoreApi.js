@@ -50,6 +50,24 @@ api.interceptors.response.use(
   }
 );
 
+// AI 챗봇 API 추가
+export const sendChatMessage = async (message, storeId) => {
+    try {
+        console.log('🤖 AI 챗봇 메시지 전송:', { message, storeId });
+        
+        const response = await api.post('/api/ai/chat', 
+            { message }, 
+            { params: { storeId } }
+        );
+        
+        console.log('✅ AI 챗봇 응답:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('❌ AI 챗봇 API 오류:', error);
+        throw error;
+    }
+};
+
 // 가게 생성(회원가입) API
 // export const createStore = async (storeData) => {
 //     try {
@@ -576,6 +594,78 @@ export const getWeatherSalesTrend = async () => {
       data: error.response?.data,
     });
 
+    throw error;
+  }
+};
+
+// 직원 목록 조회
+export const getEmployees = async () => {
+  try {
+    console.log('🔄 직원 목록 조회 요청');
+    
+    const response = await api.get('/stores/me/employees');
+    console.log('✅ 직원 목록 조회 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 목록 조회 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 등록
+export const addEmployee = async (employeeData) => {
+  try {
+    console.log('🔄 직원 등록 요청:', employeeData);
+    
+    const response = await api.post('/stores/me/employees', {
+      name: employeeData.name,
+      role: employeeData.role,
+      hourlyWage: employeeData.hourlyWage,
+      workStartTime: employeeData.workStartTime,
+      workEndTime: employeeData.workEndTime,
+      workDays: employeeData.workDays
+    });
+    
+    console.log('✅ 직원 등록 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 등록 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 정보 수정
+export const updateEmployee = async (employeeId, employeeData) => {
+  try {
+    console.log('🔄 직원 정보 수정 요청:', employeeId, employeeData);
+    
+    const response = await api.put(`/stores/me/employees/${employeeId}`, {
+      name: employeeData.name,
+      role: employeeData.role,
+      hourlyWage: employeeData.hourlyWage,
+      workStartTime: employeeData.workStartTime,
+      workEndTime: employeeData.workEndTime,
+      workDays: employeeData.workDays
+    });
+    
+    console.log('✅ 직원 정보 수정 완료:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 정보 수정 API 오류:', error);
+    throw error;
+  }
+};
+
+// 직원 삭제
+export const deleteEmployee = async (employeeId) => {
+  try {
+    console.log('🔄 직원 삭제 요청:', employeeId);
+    
+    const response = await api.delete(`/stores/me/employees/${employeeId}`);
+    console.log('✅ 직원 삭제 완료');
+    return response.data;
+  } catch (error) {
+    console.error('❌ 직원 삭제 API 오류:', error);
     throw error;
   }
 };
