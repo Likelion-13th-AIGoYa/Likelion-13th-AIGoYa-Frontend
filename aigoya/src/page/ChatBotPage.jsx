@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from '../css/ChatBotPage.module.css';
 import { getMyStore } from '../api/StoreApi';
+import { sendChatMessage } from '../api/StoreApi';
 
 const defaultSuggestions = [
     "오늘 매출 요약 보여줘",
@@ -25,18 +26,8 @@ const ChatBotPage = () => {
     const [storeInfo, setStoreInfo] = useState(null);
     const messageEndRef = useRef(null);
 
+    // storeInfo 관련 useEffect 제거 (필요없음)
     useEffect(() => {
-        // 가게 정보 가져오기
-        const fetchStoreInfo = async () => {
-            try {
-                const data = await getMyStore();
-                setStoreInfo(data);
-            } catch (error) {
-                console.error('가게 정보 조회 실패:', error);
-            }
-        };
-        fetchStoreInfo();
-
         // 새로운 채팅 세션 시작
         startNewSession();
 
@@ -61,7 +52,7 @@ const ChatBotPage = () => {
             messages: [{ type: "bot", text: "안녕하세요! 매출 분석 어시스턴트입니다. 궁금한 점을 물어보세요." }],
             timestamp: new Date()
         };
-        
+
         setChatSessions(prev => [newSession, ...prev]);
         setCurrentSessionId(newSessionId);
         setMessages(newSession.messages);
@@ -89,49 +80,26 @@ const ChatBotPage = () => {
     };
 
     const sendToAPI = async (msg) => {
-        if (!storeInfo?.storeId) {
-            setMessages(prev => [...prev, { type: "bot", text: "가게 정보를 불러올 수 없습니다. 다시 로그인해주세요." }]);
-            return;
-        }
-
-        setIsTyping(true);
-        try {
-            const response = await fetch('/api/ai/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken")}`
-                },
-                body: JSON.stringify({
-                    message: msg
-                }),
-                params: {
-                    storeId: storeInfo.storeId
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const newMessages = [...messages, { type: "bot", text: data.result }];
-            setMessages(newMessages);
-            updateCurrentSession(newMessages);
-        } catch (error) {
-            console.error('API 호출 오류:', error);
-            const errorMessages = [...messages, { type: "bot", text: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요." }];
-            setMessages(errorMessages);
-            updateCurrentSession(errorMessages);
-        } finally {
-            setIsTyping(false);
-        }
-    };
+    setIsTyping(true);
+    try {
+        const response = await sendChatMessage(msg);
+        const newMessages = [...messages, { type: "bot", text: response.result }];
+        setMessages(newMessages);
+        updateCurrentSession(newMessages);
+    } catch (error) {
+        console.error('API 호출 오류:', error);
+        const errorMessages = [...messages, { type: "bot", text: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요." }];
+        setMessages(errorMessages);
+        updateCurrentSession(errorMessages);
+    } finally {
+        setIsTyping(false);
+    }
+};
 
     const handleSendMessage = (message = input) => {
         const trimmed = message.trim();
         if (!trimmed) return;
-        
+
         const newMessages = [...messages, { type: "user", text: trimmed }];
         setMessages(newMessages);
         updateCurrentSession(newMessages);
@@ -161,7 +129,7 @@ const ChatBotPage = () => {
             <div className={styles.sidebar}>
                 <div className={styles.sidebarHeader}>
                     <h3>채팅 기록</h3>
-                    <button 
+                    <button
                         className={styles.newChatBtn}
                         onClick={startNewSession}
                     >
@@ -177,16 +145,16 @@ const ChatBotPage = () => {
                         >
                             <div className={styles.chatTitle}>{session.title}</div>
                             <div className={styles.chatTime}>
-                                {session.timestamp.toLocaleTimeString('ko-KR', { 
-                                    hour: '2-digit', 
-                                    minute: '2-digit' 
+                                {session.timestamp.toLocaleTimeString('ko-KR', {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
                                 })}
                             </div>
                         </div>
                     ))}
                 </div>
                 <div className={styles.homeButton}>
-                    <button 
+                    <button
                         className={styles.backToHomeBtn}
                         onClick={() => navigate("/")}
                     >
@@ -222,7 +190,7 @@ const ChatBotPage = () => {
                                 <span className={styles.typingDot}></span>
                                 <span className={styles.typingDot}></span>
                                 <span className={styles.typingDot}></span>
-            </div>
+                            </div>
                         </div>
                     )}
                     <div ref={messageEndRef} />
